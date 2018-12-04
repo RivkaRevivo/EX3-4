@@ -11,7 +11,7 @@ public class Main {
 		//no.read();
 		no.write();
 		no1.write();
-		System.out.println("hello");
+		
 	}
 
 }
