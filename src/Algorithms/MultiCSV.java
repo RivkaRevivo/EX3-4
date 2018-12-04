@@ -45,7 +45,7 @@ public class MultiCSV {
 	/*
 	 * This function Writes down the elements from the Layer into the KML file.
 	 */
-	
+
 	public void write(Layer layer, File MultiCSV) {
 		StringBuilder Builder = new StringBuilder();
 		Iterator<GIS_element> it = layer.iterator();
