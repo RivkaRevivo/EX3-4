@@ -20,5 +20,6 @@ class MapTest {
         Map m = new Map(max,min,img);
         Pixel p = m.CoordinateToPixel(max);
         System.out.println("x: " + p.getX() + " y:" + p.getY());
+        int y;
     }
 }
