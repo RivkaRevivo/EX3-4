@@ -10,22 +10,24 @@ import java.util.LinkedList;
 
 public class Game
 {
-    LinkedList<Pacman> pacmen_list;
-    LinkedList<Fruit> Fruit_list;
-    public Game(LinkedList<Pacman> pacmen_list, LinkedList<Fruit> Fruit_list)
+    private LinkedList<Pacman> pacman_list;
+    private LinkedList<Fruit> Fruit_list;
+    public Game(LinkedList<Pacman> pacman_list, LinkedList<Fruit> Fruit_list)
     {
-        this.pacmen_list = pacmen_list;
+        this.pacman_list = pacman_list;
         this.Fruit_list = Fruit_list;
     }
 
     public Game()
     {
         this.Fruit_list = null;
-        this.pacmen_list = null;
+        this.pacman_list = null;
     }
 
     public Game(String path)
     {
+        Fruit_list = new LinkedList<>();
+        pacman_list = new LinkedList<>();
         this.GameCsvReader(path);
     }
 
@@ -53,7 +55,7 @@ public class Game
                 if (CsLine[0].equals("P"))
                 {
                     p = new Pacman(new Point3D(Double.parseDouble(CsLine[2]),Double.parseDouble(CsLine[3]) , Double.parseDouble(CsLine[4])) , new double[3] , Double.parseDouble(CsLine[5]) , Double.parseDouble(CsLine[6]), Integer.parseInt(CsLine[1]));
-                    pacmen_list.add(p);
+                    pacman_list.add(p);
                 }
 
                 else if (CsLine[0].equals("F"))
@@ -92,7 +94,7 @@ public class Game
             sb.append("Radius");
             sb.append("\n");
 
-            for (Pacman p : pacmen_list)
+            for (Pacman p : pacman_list)
             {
                 sb.append("P,");
                 sb.append(p.getId() + ",");
@@ -115,6 +117,7 @@ public class Game
             }
 
             pr.write(sb.toString());
+            pr.close();
         }
         catch (Exception e)
         {
