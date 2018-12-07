@@ -41,6 +41,7 @@ public class Map
 
 	public Point3D PixelToCoordinate(Pixel p)
 	{
+		int x;
 		double MinMaxdiff_X = max.x() - min.x();
 		double MinMaxdiff_Y = max.y() - min.y();
 
