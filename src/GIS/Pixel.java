@@ -9,7 +9,7 @@ public class Pixel
 
     public Pixel()
     {
-    	
+
     }
 
     public Pixel(double x, double Y)

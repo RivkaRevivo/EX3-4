@@ -10,6 +10,7 @@ import java.io.File;
 
 public class Map
 {
+
 	Image map;
 	Point3D max,min;
 	Pixel Pmax,Pmin;
@@ -107,5 +108,6 @@ public class Map
 
 
 	}
-	
 }
+
+	

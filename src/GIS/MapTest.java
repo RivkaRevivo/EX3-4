@@ -1,3 +1,4 @@
+
 package GIS;
 
 import static org.junit.Assert.*;
@@ -19,16 +20,18 @@ public class MapTest {
 	}
 
 	@Test
-	public void testCoordinateToPixel() {
+	public void testCoordinateToPixel() 
+	{
 	  
 	        Point3D max= new Point3D(220190,667650);
 	        Point3D min = new Point3D(219287, 668008);
+	        System.out.println(max);
 	        String img = "Ariel1.png";
 	        Map m = new Map(max,min,img);
 	        Pixel p = m.CoordinateToPixel(max);
 	        System.out.println("x: " + p.getX() + " y:" + p.getY());
 	        
-	    }
+	 }
 	
 	
 
