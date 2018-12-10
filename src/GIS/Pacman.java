@@ -69,4 +69,5 @@ public class Pacman
     public void setId(int id) {
         this.id = id;
     }
+
 }

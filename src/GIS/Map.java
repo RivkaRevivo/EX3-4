@@ -71,6 +71,20 @@ public class Map
 
 	}
 
+	public Pixel CoordinateToPixel(Point3D cords , int width, int height)
+	{
+        double diffx = cords.x() - min.x();
+        double diffy = cords.y() - min.y();
+
+        double MinMaxdiff_X = max.x() - min.x();
+        double MinMaxdiff_Y = max.y() - min.y();
+
+        double new_x = (diffx * width) / MinMaxdiff_X;
+        double new_y = (diffy * height) / MinMaxdiff_Y;
+
+        return new Pixel(new_x,new_y);
+	}
+
 
 
 	//https://rosettacode.org/wiki/Haversine_formula#Java.

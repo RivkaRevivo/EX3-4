@@ -6,29 +6,34 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Game
 {
     private LinkedList<Pacman> pacman_list;
     private LinkedList<Fruit> Fruit_list;
-    public Game(LinkedList<Pacman> pacman_list, LinkedList<Fruit> Fruit_list)
+    private Map MyMap;
+    public Game(LinkedList<Pacman> pacman_list, LinkedList<Fruit> Fruit_list, Map MyMap)
     {
         this.pacman_list = pacman_list;
         this.Fruit_list = Fruit_list;
+        this.MyMap = MyMap;
     }
 
     public Game()
     {
-        this.Fruit_list = null;
-        this.pacman_list = null;
+        this.Fruit_list = new LinkedList<>();
+        this.pacman_list = new LinkedList<>();
+        MyMap = null;
     }
 
-    public Game(String path)
+    public Game(String path, Map MyMap)
     {
         Fruit_list = new LinkedList<>();
         pacman_list = new LinkedList<>();
         this.GameCsvReader(path);
+        this.MyMap = MyMap;
     }
 
     /**
@@ -123,5 +128,30 @@ public class Game
         {
             e.printStackTrace();
         }
+    }
+
+    public void AddPacman(Pacman p)
+    {
+        pacman_list.add(p);
+    }
+    public void AddFruit(Fruit f)
+    {
+        Fruit_list.add(f);
+    }
+    public Iterator<Pacman> PacmanIterator()
+    {
+        return pacman_list.iterator();
+    }
+    public Iterator<Fruit> FruitIterator()
+    {
+        return Fruit_list.iterator();
+    }
+
+    public Map getMyMap() {
+        return MyMap;
+    }
+
+    public void setMyMap(Map myMap) {
+        MyMap = myMap;
     }
 }

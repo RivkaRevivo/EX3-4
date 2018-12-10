@@ -1,5 +1,8 @@
 package GUI;
 
+import GIS.*;
+import Geom.Point3D;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,12 +11,14 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class MyFrame extends JFrame implements MouseListener
 {
     public BufferedImage MapImg,PacmanImg, FruitImg;
-    public int x = -1, y = -1;
+    public int x = -1, y = -1 , pacmanID = 0 , fruitID = 0;
     public int buttonClicked = -1;
+    public Game thisGame;
 
     public MyFrame()
     {
@@ -23,6 +28,7 @@ public class MyFrame extends JFrame implements MouseListener
 
     private void initGUI()
     {
+        thisGame = new Game();
         MenuBar menuBar = new MenuBar();
         Menu convertion_menu = new Menu("Csv/Kml");
         Menu Start_menu = new Menu("Game Menu");
@@ -54,11 +60,29 @@ public class MyFrame extends JFrame implements MouseListener
         {
             e.printStackTrace();
         }
+
+        thisGame.setMyMap(new Map(new Point3D( 32.106046, 35.202574) , new Point3D(32.101858,   35.212405) , "Ariel1.png"));
     }
 
     public void paint(Graphics g)
     {
-        g.drawImage(MapImg,0,0,this);
+        g.drawImage(MapImg,0,0,this.getWidth(),this.getHeight(),this);
+
+        Iterator<Pacman> IP = thisGame.PacmanIterator();
+        while (IP.hasNext())
+        {
+            Pacman p = IP.next();
+            Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition() , this.getWidth() , this.getHeight());
+            g.drawImage(PacmanImg , (int)pos.getX(), (int)pos.getY() , 20 , 20 , this);
+        }
+
+        Iterator<Fruit> IF = thisGame.FruitIterator();
+        while (IF.hasNext())
+        {
+            Fruit f = IF.next();
+            Pixel pos = thisGame.getMyMap().CoordinateToPixel(f.getPosition() , this.getWidth() , this.getHeight());
+            g.drawImage(FruitImg , (int)pos.getX(), (int)pos.getY() , 20 , 20 , this);
+        }
 
         if (x != -1 && y != -1)
         {
@@ -66,30 +90,31 @@ public class MyFrame extends JFrame implements MouseListener
             {
                 g.drawImage(PacmanImg,x,y,20,20,this);
                 buttonClicked = -1;
+                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y));
+                thisGame.AddPacman(new Pacman(PixelToCoord , null , 1 , 1 , pacmanID));
+                pacmanID++;
             }
             else if (buttonClicked == 3)
             {
                 g.drawImage(FruitImg,x,y,20,20,this);
                 buttonClicked = -1;
+                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y));
+                thisGame.AddFruit(new Fruit(PixelToCoord , fruitID , 1));
+                fruitID++;
             }
+
 
         }
     }
 
-
     @Override
     public void mouseClicked(MouseEvent arg)
     {
+
         x = arg.getX();
         y = arg.getY();
         buttonClicked = arg.getButton();
-        //ImagePanel IP = new ImagePanel(x,y,buttonClicked);
-        //IP.setVisible(true);
-        //add(IP);
-        /*JLabel ImageLabel = new JLabel(new ImageIcon(PacmanImg));
-        ImageLabel.setBounds(x,y,20,20);
-        ImageLabel.setVisible(true);
-        add(ImageLabel);*/
+        repaint(x,y,20,20);
     }
 
     /**
@@ -131,7 +156,20 @@ public class MyFrame extends JFrame implements MouseListener
     public void mouseExited(MouseEvent e) {
     }
 
-
-
+    /*@Override
+    public void paintComponents(Graphics g)
+    {
+        super.paintComponents(g);
+        if(buttonClicked == 1)
+        {
+            g.drawImage(PacmanImg,x,y,20,20,this);
+            buttonClicked = -1;
+        }
+        else if (buttonClicked == 3)
+        {
+            g.drawImage(FruitImg,x,y,20,20,this);
+            buttonClicked = -1;
+        }
+    }*/
 
 }
