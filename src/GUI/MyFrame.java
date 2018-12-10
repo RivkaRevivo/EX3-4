@@ -73,7 +73,7 @@ public class MyFrame extends JFrame implements MouseListener
         {
             Pacman p = IP.next();
             Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition() , this.getWidth() , this.getHeight());
-            g.drawImage(PacmanImg , (int)pos.getX(), (int)pos.getY() , 20 , 20 , this);
+            g.drawImage(PacmanImg , (int)pos.getX(), (int)pos.getY() , 5 ,5 , this);
         }
 
         Iterator<Fruit> IF = thisGame.FruitIterator();
@@ -81,14 +81,14 @@ public class MyFrame extends JFrame implements MouseListener
         {
             Fruit f = IF.next();
             Pixel pos = thisGame.getMyMap().CoordinateToPixel(f.getPosition() , this.getWidth() , this.getHeight());
-            g.drawImage(FruitImg , (int)pos.getX(), (int)pos.getY() , 20 , 20 , this);
+            g.drawImage(FruitImg , (int)pos.getX(), (int)pos.getY() , 5 , 5 , this);
         }
 
         if (x != -1 && y != -1)
         {
            if(buttonClicked == 1)
             {
-                g.drawImage(PacmanImg,x,y,20,20,this);
+                g.drawImage(PacmanImg,x,y,5,5,this);
                 buttonClicked = -1;
                 Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y));
                 thisGame.AddPacman(new Pacman(PixelToCoord , null , 1 , 1 , pacmanID));
@@ -96,7 +96,7 @@ public class MyFrame extends JFrame implements MouseListener
             }
             else if (buttonClicked == 3)
             {
-                g.drawImage(FruitImg,x,y,20,20,this);
+                g.drawImage(FruitImg,x,y,5,5,this);
                 buttonClicked = -1;
                 Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y));
                 thisGame.AddFruit(new Fruit(PixelToCoord , fruitID , 1));
@@ -114,7 +114,7 @@ public class MyFrame extends JFrame implements MouseListener
         x = arg.getX();
         y = arg.getY();
         buttonClicked = arg.getButton();
-        repaint(x,y,20,20);
+        repaint(x,y,5,5);
     }
 
     /**
