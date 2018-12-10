@@ -42,7 +42,6 @@ public class Map
 
 	public Point3D PixelToCoordinate(Pixel p)
 	{
-		int x;
 		double MinMaxdiff_X = max.x() - min.x();
 		double MinMaxdiff_Y = max.y() - min.y();
 
@@ -85,6 +84,21 @@ public class Map
         return new Pixel(new_x,new_y);
 	}
 
+
+    public Point3D PixelToCoordinate(Pixel p, int width, int height)
+    {
+        double MinMaxdiff_X = max.x() - min.x();
+        double MinMaxdiff_Y = max.y() - min.y();
+
+        double diffCoord_X=(MinMaxdiff_X* p.getX())/width;
+        double diffCoord_Y=(MinMaxdiff_Y*p.getY())/height;
+
+        double FullCoord_X=diffCoord_X+this.min.x();
+        double FullCoord_Y=diffCoord_Y+this.min.y();
+
+        Point3D ThisPoint=new Point3D(FullCoord_X,FullCoord_Y);
+        return ThisPoint;
+    }
 
 
 	//https://rosettacode.org/wiki/Haversine_formula#Java.

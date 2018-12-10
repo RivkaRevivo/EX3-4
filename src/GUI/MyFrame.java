@@ -20,6 +20,8 @@ public class MyFrame extends JFrame implements MouseListener
     public int buttonClicked = -1;
     public Game thisGame;
 
+    private int IconSize = 20;
+
     public MyFrame()
     {
         initGUI();
@@ -73,7 +75,7 @@ public class MyFrame extends JFrame implements MouseListener
         {
             Pacman p = IP.next();
             Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition() , this.getWidth() , this.getHeight());
-            g.drawImage(PacmanImg , (int)pos.getX(), (int)pos.getY() , 20 , 20 , this);
+            g.drawImage(PacmanImg , (int)pos.getX(), (int)pos.getY() , IconSize , IconSize , this);
         }
 
         Iterator<Fruit> IF = thisGame.FruitIterator();
@@ -81,29 +83,27 @@ public class MyFrame extends JFrame implements MouseListener
         {
             Fruit f = IF.next();
             Pixel pos = thisGame.getMyMap().CoordinateToPixel(f.getPosition() , this.getWidth() , this.getHeight());
-            g.drawImage(FruitImg , (int)pos.getX(), (int)pos.getY() , 20 , 20 , this);
+            g.drawImage(FruitImg , (int)pos.getX(), (int)pos.getY() , IconSize , IconSize , this);
         }
 
         if (x != -1 && y != -1)
         {
            if(buttonClicked == 1)
             {
-                g.drawImage(PacmanImg,x,y,20,20,this);
+                g.drawImage(PacmanImg,x,y,IconSize,IconSize,this);
                 buttonClicked = -1;
-                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y));
+                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y) , this.getWidth() , this.getHeight());
                 thisGame.AddPacman(new Pacman(PixelToCoord , null , 1 , 1 , pacmanID));
                 pacmanID++;
             }
             else if (buttonClicked == 3)
             {
-                g.drawImage(FruitImg,x,y,20,20,this);
+                g.drawImage(FruitImg,x,y,IconSize,IconSize,this);
                 buttonClicked = -1;
-                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y));
+                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x,y) , this.getWidth() , this.getHeight());
                 thisGame.AddFruit(new Fruit(PixelToCoord , fruitID , 1));
                 fruitID++;
             }
-
-
         }
     }
 
@@ -114,7 +114,7 @@ public class MyFrame extends JFrame implements MouseListener
         x = arg.getX();
         y = arg.getY();
         buttonClicked = arg.getButton();
-        repaint(x,y,20,20);
+        repaint(x,y,IconSize,IconSize);
     }
 
     /**
