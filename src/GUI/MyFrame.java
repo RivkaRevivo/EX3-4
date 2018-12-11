@@ -1,24 +1,30 @@
 package GUI;
 
+import Algorithms.ShortestPathAlgo;
 import GIS.*;
 import Geom.Point3D;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 public class MyFrame extends JFrame implements MouseListener
 {
-    public BufferedImage MapImg,PacmanImg, FruitImg;
-    public int x = -1, y = -1 , pacmanID = 0 , fruitID = 0;
-    public int buttonClicked = -1;
-    public Game thisGame;
+    private BufferedImage MapImg,PacmanImg, FruitImg;
+    private int x = -1, y = -1 , pacmanID = 0 , fruitID = 0;
+    private int buttonClicked = -1;
+    private Game thisGame;
+    private boolean GameHasStarted = false;
+    private LinkedList<Path> ShortPath;
 
     private int IconSize = 20;
 
@@ -64,27 +70,75 @@ public class MyFrame extends JFrame implements MouseListener
         }
 
         thisGame.setMyMap(new Map(new Point3D( 32.106046, 35.202574) , new Point3D(32.101858,   35.212405) , "Ariel1.png"));
+        CI1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                JFileChooser fileChooser = new JFileChooser();
+                if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+                {
+                    thisGame.ResetLists();
+                    File file = fileChooser.getSelectedFile();
+                    thisGame.GameCsvReader(file.getPath());
+                    repaint();
+                }
+            }
+        });
+
+        CI2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                thisGame.GameCsvWriter();
+            }
+        });
+        SI1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ShortPath = ShortestPathAlgo.ShortestPath(thisGame);
+                GameHasStarted = true;
+                repaint();
+            }
+        });
+
     }
 
     public void paint(Graphics g)
     {
         g.drawImage(MapImg,0,0,this.getWidth(),this.getHeight(),this);
-
         Iterator<Pacman> IP = thisGame.PacmanIterator();
-        while (IP.hasNext())
+
+        if (GameHasStarted)
         {
-            Pacman p = IP.next();
-            Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition() , this.getWidth() , this.getHeight());
-            g.drawImage(PacmanImg , (int)pos.getX(), (int)pos.getY() , IconSize , IconSize , this);
+            int i = 0;
+            while (IP.hasNext())
+            {
+                Pixel LastPos = thisGame.getMyMap().CoordinateToPixel(ShortPath.get(i).getLast().getPosition() , this.getWidth(),this.getHeight());
+                g.drawImage(PacmanImg, (int) LastPos.getX() , (int) LastPos.getY(),IconSize,IconSize,this);
+                IP.next();
+                i++;
+            }
+        }
+        else
+            {
+
+            while (IP.hasNext())
+            {
+                Pacman p = IP.next();
+                Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition(), this.getWidth(), this.getHeight());
+                g.drawImage(PacmanImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
+            }
+
+            Iterator<Fruit> IF = thisGame.FruitIterator();
+            while (IF.hasNext())
+            {
+                Fruit f = IF.next();
+                Pixel pos = thisGame.getMyMap().CoordinateToPixel(f.getPosition(), this.getWidth(), this.getHeight());
+                g.drawImage(FruitImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
+            }
         }
 
-        Iterator<Fruit> IF = thisGame.FruitIterator();
-        while (IF.hasNext())
-        {
-            Fruit f = IF.next();
-            Pixel pos = thisGame.getMyMap().CoordinateToPixel(f.getPosition() , this.getWidth() , this.getHeight());
-            g.drawImage(FruitImg , (int)pos.getX(), (int)pos.getY() , IconSize , IconSize , this);
-        }
+
 
         if (x != -1 && y != -1)
         {
@@ -107,6 +161,11 @@ public class MyFrame extends JFrame implements MouseListener
         }
     }
 
+    /**
+     * Invoked when the mouse button has been clicked (pressed and released) on a component.
+     *
+     * @param arg the event to be processed
+     */
     @Override
     public void mouseClicked(MouseEvent arg)
     {
@@ -156,20 +215,9 @@ public class MyFrame extends JFrame implements MouseListener
     public void mouseExited(MouseEvent e) {
     }
 
-    /*@Override
-    public void paintComponents(Graphics g)
+    public BufferedImage getMapImg()
     {
-        super.paintComponents(g);
-        if(buttonClicked == 1)
-        {
-            g.drawImage(PacmanImg,x,y,20,20,this);
-            buttonClicked = -1;
-        }
-        else if (buttonClicked == 3)
-        {
-            g.drawImage(FruitImg,x,y,20,20,this);
-            buttonClicked = -1;
-        }
-    }*/
+        return MapImg;
+    }
 
 }

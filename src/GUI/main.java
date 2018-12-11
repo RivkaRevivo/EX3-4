@@ -8,7 +8,7 @@ public class main
     {
         MyFrame frame = new MyFrame();
         frame.setVisible(true);
-        frame.setSize(frame.MapImg.getWidth(),frame.MapImg.getHeight());
+        frame.setSize(frame.getMapImg().getWidth(),frame.getMapImg().getHeight());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

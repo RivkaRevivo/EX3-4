@@ -14,6 +14,13 @@ public class Game
     private LinkedList<Pacman> pacman_list;
     private LinkedList<Fruit> Fruit_list;
     private Map MyMap;
+
+    /**
+     * a basic Constructor
+     * @param pacman_list the List of Pacmans
+     * @param Fruit_list the List of Fruits
+     * @param MyMap the Game Map
+     */
     public Game(LinkedList<Pacman> pacman_list, LinkedList<Fruit> Fruit_list, Map MyMap)
     {
         this.pacman_list = pacman_list;
@@ -21,6 +28,10 @@ public class Game
         this.MyMap = MyMap;
     }
 
+    /**
+     * Initialized the List of Pacmans and Fruits as empty Lists
+     * and The to Null
+     */
     public Game()
     {
         this.Fruit_list = new LinkedList<>();
@@ -28,6 +39,11 @@ public class Game
         MyMap = null;
     }
 
+    /**
+     * Initialized The Lists using a Csv File
+     * @param path the Locating of the Csv File
+     * @param MyMap The Game Map
+     */
     public Game(String path, Map MyMap)
     {
         Fruit_list = new LinkedList<>();
@@ -37,9 +53,9 @@ public class Game
     }
 
     /**
-     *
-     * @param Path
-     * the pacman that added to pacman_list has no azimuth
+     * Take the Csv file as formatted in the Assignment, and turn it to a list of Pacmans and Fruits
+     * @param Path the Location of the Csv File
+     * the pacman that added to pacman_list has no azimuth. the Azimuth will be added later
      */
     public void GameCsvReader(String Path)
     {
@@ -82,6 +98,9 @@ public class Game
         }
     }
 
+    /**
+     * Turn the List of Pacmans and Fruits to a Csv file as Formatted in the Assignment
+     */
     public void GameCsvWriter()
     {
         PrintWriter pr = null;
@@ -130,28 +149,80 @@ public class Game
         }
     }
 
+    /**
+     * Add a Pacman to the Game List
+     * @param p the Pacman to add
+     */
     public void AddPacman(Pacman p)
     {
         pacman_list.add(p);
     }
+
+    /**
+     * Add a Fruit to the Game List
+     * @param f the Fruit to add
+     */
     public void AddFruit(Fruit f)
     {
         Fruit_list.add(f);
     }
+
+    /**
+     * Return an Iterator for The List of Pacmans
+     * @return The Iterator
+     */
     public Iterator<Pacman> PacmanIterator()
     {
         return pacman_list.iterator();
     }
+
+    /**
+     * return an Iterator for the List of Fruits
+     * @return The Iterator
+     */
     public Iterator<Fruit> FruitIterator()
     {
         return Fruit_list.iterator();
     }
 
-    public Map getMyMap() {
+    /**
+     * Get for The Game Map
+     * @return The Game Map
+     */
+    public Map getMyMap()
+    {
         return MyMap;
     }
 
+    /**
+     * Set for The Game Map
+     * @param myMap The new Game Map
+     */
     public void setMyMap(Map myMap) {
         MyMap = myMap;
+    }
+
+    /**
+     * return A copy of The Fruit List
+     * @return the List of Fruits
+     */
+    public LinkedList<Fruit> getFruit_listCopy()
+    {
+        return new LinkedList<>(Fruit_list);
+    }
+
+    /**
+     * return A copy of The Pacman List
+     * @return the List of Pacmans
+     */
+    public LinkedList<Pacman> getPacman_listCopy()
+    {
+        return new LinkedList<>(pacman_list);
+    }
+
+    public void ResetLists()
+    {
+        pacman_list = new LinkedList<>();
+        Fruit_list = new LinkedList<>();
     }
 }

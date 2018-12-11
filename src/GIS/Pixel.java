@@ -1,7 +1,8 @@
 package GIS;
 
-import Geom.Point3D;
-
+/**
+ * A class Use To Represent a Pixel on The Map
+ */
 public class Pixel
 {
     private double x;
