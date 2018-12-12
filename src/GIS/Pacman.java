@@ -27,7 +27,6 @@ public class Pacman
         this.Speed = 0;
         this.Radius = 0;
         this.id = -1;
-
     }
 
     public Point3D getPosition() {

@@ -13,7 +13,7 @@ public class Map
 
 	Image map;
 	Point3D max,min;
-	Pixel Pmax,Pmin;
+	private Pixel Pmax,Pmin;
 
 	public Map(Point3D max , Point3D min, String img)
 	{
@@ -42,7 +42,6 @@ public class Map
 
 	public Point3D PixelToCoordinate(Pixel p)
 	{
-		int x;
 		double MinMaxdiff_X = max.x() - min.x();
 		double MinMaxdiff_Y = max.y() - min.y();
 
@@ -86,6 +85,21 @@ public class Map
 	}
 
 
+    public Point3D PixelToCoordinate(Pixel p, int width, int height)
+    {
+        double MinMaxdiff_X = max.x() - min.x();
+        double MinMaxdiff_Y = max.y() - min.y();
+
+        double diffCoord_X=(MinMaxdiff_X* p.getX())/width;
+        double diffCoord_Y=(MinMaxdiff_Y*p.getY())/height;
+
+        double FullCoord_X=diffCoord_X+this.min.x();
+        double FullCoord_Y=diffCoord_Y+this.min.y();
+
+        Point3D ThisPoint=new Point3D(FullCoord_X,FullCoord_Y);
+        return ThisPoint;
+    }
+
 
 	//https://rosettacode.org/wiki/Haversine_formula#Java.
 	public double haversine(Pixel p1, Pixel p2) {
@@ -118,9 +132,11 @@ public class Map
 
 		double angle=Math.atan2(x, y);
 		return angle;
+	}
 
-
-
+	public Pixel getPmax()
+	{
+		return this.Pmax;
 	}
 }
 
