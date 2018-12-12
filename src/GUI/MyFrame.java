@@ -111,13 +111,50 @@ public class MyFrame extends JFrame implements MouseListener
         if (GameHasStarted)
         {
             int i = 0;
+            Pixel LastPos;
             while (IP.hasNext())
             {
-                Pixel LastPos = thisGame.getMyMap().CoordinateToPixel(ShortPath.get(i).getLast().getPosition() , this.getWidth(),this.getHeight());
+                if (!ShortPath.get(i).isEmpty())
+                    LastPos = thisGame.getMyMap().CoordinateToPixel(ShortPath.get(i).getLast().getPosition() , this.getWidth(),this.getHeight());
+                else
+                    LastPos = thisGame.getMyMap().CoordinateToPixel(thisGame.getPacman_listCopy().get(i).getPosition() , this.getWidth() , this.getHeight());
                 g.drawImage(PacmanImg, (int) LastPos.getX() , (int) LastPos.getY(),IconSize,IconSize,this);
                 IP.next();
                 i++;
             }
+
+            LinkedList<Path> CopyPath = new LinkedList<Path>(ShortPath);
+            /*LinkedList<Pacman> CopyPacman = thisGame.getPacman_listCopy();
+
+            //Draw the first Line Between The Pacmen and rhe fruit.
+            for (i = 0; i < CopyPath.size(); i++)
+            {
+                if(!CopyPath.get(i).isEmpty())
+                {
+                    Pixel c1 = thisGame.getMyMap().CoordinateToPixel(CopyPacman.get(i).getPosition() , this.getWidth() , this.getHeight());
+                    Pixel c2 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(i).get(0).getPosition() , this.getWidth() , this.getHeight());
+                    g.drawLine((int) c1.getX() , (int) c1.getY() , (int) c2.getX() , (int) c2.getY());
+                }
+            }*/
+
+
+            while (!CopyPath.isEmpty())
+            {
+                i = 0;
+                while (CopyPath.get(0).size() > i + 1)
+                {
+                    Pixel c1 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i).getPosition() , this.getWidth() , this.getHeight());
+                    Pixel c2 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i + 1).getPosition() , this.getWidth() , this.getHeight());
+                    g.setColor(Color.RED);
+                    g.drawLine((int)c1.getX() +9 , (int)c1.getY() + 9,(int) c2.getX() + 9, (int) c2.getY()+ 9);
+                    g.drawLine((int)c1.getX()+11 , (int)c1.getY() +11 ,(int) c2.getX()+11 , (int) c2.getY()+11 );
+                    g.drawLine((int)c1.getX() + 10 , (int)c1.getY() +10 ,(int) c2.getX() + 10 , (int) c2.getY() +10);
+                    g.fillOval((int)c1.getX() , (int)c1.getY() , IconSize , IconSize);
+                    i++;
+                }
+                CopyPath.removeFirst();
+            }
+
         }
         else
             {

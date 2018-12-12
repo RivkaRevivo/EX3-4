@@ -13,7 +13,7 @@ public class Map
 
 	Image map;
 	Point3D max,min;
-	Pixel Pmax,Pmin;
+	private Pixel Pmax,Pmin;
 
 	public Map(Point3D max , Point3D min, String img)
 	{
@@ -132,9 +132,11 @@ public class Map
 
 		double angle=Math.atan2(x, y);
 		return angle;
+	}
 
-
-
+	public Pixel getPmax()
+	{
+		return this.Pmax;
 	}
 }
 

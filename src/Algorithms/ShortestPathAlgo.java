@@ -10,35 +10,45 @@ import java.util.LinkedList;
 
 public class ShortestPathAlgo
 {
-    public static LinkedList<Path> ShortestPath(Game g) {
+    public static LinkedList<Path> ShortestPath(Game g)
+    {
         LinkedList<Path> Paths = new LinkedList<>();
         LinkedList<Fruit> FruitList = g.getFruit_listCopy();
         LinkedList<Pacman> PacmanList = g.getPacman_listCopy();
 
-        int temp = 0;
-        double Nearmove = 0;
+        int tempFruitPos = 0;
+        int tempPacmanPos = 0;
+        Path p;
+        double Nearmove = Double.MAX_VALUE;
         Fruit fr = null;
 
         for (int i = 0; i < PacmanList.size(); i++)
         {
-            Paths.add(new Path());
+            p = new Path();
+            p.add(new Fruit(PacmanList.get(i).getPosition() , -1 , 1 ));
+            Paths.add(p);
         }
 
 
-        while (!FruitList.isEmpty()) {
-            for (int i = 0; i < PacmanList.size(); i++) {
-                for (int j = 0; j < FruitList.size(); j++) {
-                    if (Nearmove < getmoven(PacmanList.get(i), FruitList.get(j)))
+        while (!FruitList.isEmpty())
+        {
+            for (int i = 0; i < PacmanList.size(); i++)
+            {
+                for (int j = 0; j < FruitList.size(); j++)
+                {
+                    if (Nearmove > getmoven(PacmanList.get(i), FruitList.get(j)))
                     {
                         Nearmove = getmoven(PacmanList.get(i), FruitList.get(j));
                         fr = FruitList.get(j);
-                        temp = j;
+                        tempFruitPos = j;
+                        tempPacmanPos = i;
                     }
                 }
-                Paths.get(i).add(fr);
-                FruitList.remove(temp);
-                Nearmove = 0;
             }
+            Paths.get(tempPacmanPos).addLast(fr);
+            PacmanList.get(tempPacmanPos).setPosition(fr.getPosition());
+            FruitList.remove(tempFruitPos);
+            Nearmove = Double.MAX_VALUE;
         }
         return Paths;
     }
@@ -51,5 +61,4 @@ public class ShortestPathAlgo
         double move=(distance-p.getRadius())/p.getSpeed();
         return move;
     }
-
 }
