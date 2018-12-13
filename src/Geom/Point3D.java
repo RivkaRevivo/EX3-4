@@ -147,7 +147,6 @@ public class Point3D implements Geom_element, Serializable
 	}
 
 	public boolean close2equals(Point3D p2, double dist)
-
 	{
 
 		return ( this.distance3D(p2)< dist );
