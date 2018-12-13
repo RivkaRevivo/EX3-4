@@ -1,28 +1,23 @@
 package Algorithms;
 
-import java.io.BufferedReader;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-
 import GIS.Element;
 import GIS.GIS_element;
 import GIS.Layer;
 import GIS.Project;
 
-public class MultiCSV {
+import java.io.*;
+import java.util.Iterator;
+
+public class MultiCSV
+{
 
 	/**
-	 * @authors Eli & Qusai & Shai
+	 * @authors
 	 * This function creates the KML file and writes the header.
 	 */
 	
-	public void print(File MultiCSV) {
+	public void print(File MultiCSV)
+	{
 		try 
 		{
 			Print = new PrintWriter(MultiCSV);
@@ -46,7 +41,8 @@ public class MultiCSV {
 	 * This function Writes down the elements from the Layer into the KML file.
 	 */
 
-	public void write(Layer layer, File MultiCSV) {
+	public void write(Layer layer, File MultiCSV)
+	{
 		StringBuilder Builder = new StringBuilder();
 		Iterator<GIS_element> it = layer.iterator();
 		while(it.hasNext()) {
@@ -61,7 +57,6 @@ public class MultiCSV {
 			Builder.append("Time Stamp: " + Replace.getData().toString());
 			Builder.append("</description>");
 			Builder.append("<styleUrl>");
-			Builder.append(Replace.getData().getColor());
 			Builder.append("</styleUrl>");
 			Builder.append("<Point>");
 			Builder.append("<coordinates>");
@@ -77,7 +72,8 @@ public class MultiCSV {
 	 * This function closes the KML file and sends it to the directory path you declared.
 	 */
 	
-	public void Close(File MultiCSV) {
+	public void Close(File MultiCSV)
+	{
 		StringBuilder Builder = new StringBuilder();
 		Builder.append("</Document>");
 		Builder.append("</kml>");
@@ -103,7 +99,7 @@ public class MultiCSV {
 			while ((L = Buffer.readLine()) != null) {
 				String[] Data = L.split(S);
 				Element place = new Element();
-				place.ElementSet(Data[1], Data[10], Data[7]+","+Data[6]+","+Data[8], Data[3], _List.get_Meta_data().getColor());
+				place.ElementSet(Data[1], Data[10], Data[7]+","+Data[6]+","+Data[8], Data[3]);
 				_List.add(place);
 			}
 		}
@@ -120,9 +116,10 @@ public class MultiCSV {
 	 * For example: /home/eli/eclipse-workspace/OOP_EX2-EX4-master/data
 	 * This function accepts .csv files ONLY!
 	 */
-	public Project ListOfCSV(File MultiCSV) {
+	public Project ListOfCSV(File MultiCSV , String FolderLocation)
+	{
 		Project _pList = new Project();
-		File[] files = new File("C:\\file").listFiles(
+		File[] files = new File(FolderLocation).listFiles(
 				new FilenameFilter() { @Override public boolean accept(File dir, String name) { return name.endsWith(".csv"); } });
 		print(MultiCSV);
 		for(int i=0; i<files.length; i++) {

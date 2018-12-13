@@ -7,8 +7,6 @@ public interface Meta_data {
 	public long getUTC();
 	/** return a String representing this data */
 	public String toString();
-	/** returns the Color associated with this data; */
-	public String getColor();
 	/**
 	 * @return the orientation: yaw, pitch and roll associated with this data;
 	 */

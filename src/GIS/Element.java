@@ -1,15 +1,15 @@
 package GIS;
 
-import Geom.Geom_element;
-
 import Coords.MyCoords;
-import GIS.Meta_data;
+import Geom.Geom_element;
 import Geom.Point3D;
 
-public class Element implements GIS_element{
+public class Element implements GIS_element
+{
 
 	@Override
-	public Geom_element getGeom() {
+	public Geom_element getGeom()
+	{
 		return _Geom;
 	}
 
@@ -19,7 +19,8 @@ public class Element implements GIS_element{
 	 */
 	
 	@Override
-	public void translate(Point3D vec) {
+	public void translate(Point3D vec)
+	{
 		MyCoords coords = new MyCoords();
 		_Geom = coords.add(_Geom, vec);
 	}
@@ -28,13 +29,13 @@ public class Element implements GIS_element{
 
 	public Element() {}
 	
-	public void ElementSet(String name, String descript, String point, String time, String color) {
+	public void ElementSet(String name, String descript, String point, String time)
+	{
 		this._Name = name;
 		this._Descript = descript;
 		this._Point = point;
 		this._Time = time;
 		this._M = new Metadata();
-		this._M.setColor(color);
 	}
 
 	//**********Private Methods**********//
@@ -67,5 +68,4 @@ public class Element implements GIS_element{
 	public String getTime() {
 		return _Time;
 	}
-
 }

@@ -10,8 +10,8 @@ public class Test {
 		 * For Example: ("/home/eli/eclipse-workspace/OOP_EX2-EX4-master/data/MultiCSV.kml")
 		 */
 		MultiCSV Test = new MultiCSV();
-		File MultiCSV = new File("C:\\file\\MultiCSV.kml");
-		Test.ListOfCSV(MultiCSV);
+		File MultiCSV = new File("C:/Users/Owner/Desktop/New folder/NewKmlFile.kml" );
+		Test.ListOfCSV(MultiCSV , "C:\\Users\\Owner\\Desktop\\New folder");
 		
 		
 	}
