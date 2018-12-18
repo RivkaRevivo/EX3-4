@@ -61,4 +61,13 @@ public class ShortestPathAlgo
         double move=(distance-p.getRadius())/p.getSpeed();
         return move;
     }
+
+    public static LinkedList<Path> GetCopyPaths(LinkedList<Path> LP)
+    {
+        LinkedList<Path> PA = new LinkedList<>();
+        for(int i=0;i<LP.size();i++){
+            PA.add(LP.get(i).getCopyPath());
+        }
+        return PA;
+    }
 }

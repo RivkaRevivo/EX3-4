@@ -26,7 +26,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
     private int buttonClicked = -1;
     private Game thisGame,GameCopy;
     private boolean GameHasStarted = false;
-    private LinkedList<Path> ShortPath = null;
+    private LinkedList<Path> ShortPath = null ,PathsCopy = null;
 
     private int IconSize = 20;
 
@@ -103,8 +103,8 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
         CI3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (ShortPath != null)
-                    Path2Kml.Paths2kml(ShortPath);
+                if (PathsCopy != null)
+                    Path2Kml.Paths2kml(PathsCopy);
             }
         });
 
@@ -115,6 +115,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
             public void actionPerformed(ActionEvent e) {
                 ShortPath = ShortestPathAlgo.ShortestPath(thisGame);
                 GameHasStarted = true;
+                PathsCopy = ShortestPathAlgo.GetCopyPaths( ShortPath);
                 Thread t = new Thread(temp);
                 t.start();
             }
@@ -190,7 +191,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                     g.drawImage(PacmanImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
 
                     //System.out.println("Pacman " + p.getId() + " New Position: x: " + p.getPosition().x() + " y: " + p.getPosition().y());
-                    //System.out.println("Pacman " + p.getId() + " New Pixels: x: " + pos.getX() + " y: " + pos.getY());
+                    System.out.println("Pacman " + p.getId() + " New Pixels: x: " + pos.getX() + " y: " + pos.getY());
 
                 }
 
@@ -323,7 +324,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                         Pixel CurrnetPacmanPosPixel = thisGame.getMyMap().CoordinateToPixel(CurrnetPacmanPos, this.getWidth(), this.getHeight());
                         Pixel CurrnetFruitPosPixel = thisGame.getMyMap().CoordinateToPixel(CurrnetFruitPos, this.getWidth(), this.getHeight());
 
-                        //System.out.println("Fruit Pixel:  x:" + CurrnetFruitPosPixel.getX() + " y:" + CurrnetFruitPosPixel.getY());
+                        System.out.println("Fruit Pixel:  x:" + CurrnetFruitPosPixel.getX() + " y:" + CurrnetFruitPosPixel.getY());
 
 
                         if (CurrnetPacmanPosPixel.getX() == CurrnetFruitPosPixel.getX())
@@ -336,8 +337,8 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                         else if (CurrnetPacmanPosPixel.getY() < CurrnetFruitPosPixel.getY())
                             y = 1;
                         else y = -1;
-                        int new_x = (int)(CurrnetPacmanPosPixel.getX() + (x * speed));
-                        int new_y = (int)(CurrnetPacmanPosPixel.getY() + (y * speed));
+                        int new_x = (int)(CurrnetPacmanPosPixel.getX() + (x));
+                        int new_y = (int)(CurrnetPacmanPosPixel.getY() + (y));
                         CurrnetPacmanPosPixel.setX(new_x);
                         CurrnetPacmanPosPixel.setY(new_y);
 
