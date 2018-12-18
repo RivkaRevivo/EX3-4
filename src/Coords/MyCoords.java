@@ -1,5 +1,6 @@
 package Coords;
 
+import GIS.Pacman;
 import Geom.Point3D;
 
 public class MyCoords {
@@ -33,6 +34,18 @@ public class MyCoords {
 		return new_Point;
 
 	}
+
+	/*public Point3D add2D(Point3D gps, Point3D local_vector_in_meter)
+	{
+		double r = local_vector_in_meter.x();
+		double phi = local_vector_in_meter.y();
+		double x =  r*Math.cos(phi);                                               ///ask
+		double y = r*Math.sin(phi);
+
+		Point3D new_Point = new Point3D(gps.x()+x, gps.y()+y);
+
+		return new_Point;
+	}*/
 
 	 /*
 	 * The "Haversine formula" to calculate distance between two points on a sphere.
@@ -175,4 +188,41 @@ public class MyCoords {
 
 	}
 
+	public double CalcAzimute(Point3D first , Point3D second)
+	{
+		double Delta_Y=first.y()-second.y();
+		double Delta_X=first.x()-second.x();
+		double a=Math.atan(Math.abs(Delta_Y/Delta_X));
+		if(Delta_X >= 0 && Delta_Y >= 0)
+		{
+			a=a;
+
+		}
+		else if(Delta_X< 0&& Delta_Y >= 0){
+			a=Math.PI-a;
+		}
+		else if(Delta_X< 0&& Delta_Y < 0){
+			a=Math.PI+a;
+		}
+		else if(Delta_X>= 0&& Delta_Y < 0){
+			a=2*Math.PI+a;
+		}
+		return a;
+	}
+
+	public Point3D AddToPointAzimutDist(Point3D p , double azimut , double dist)
+	{
+		double e = dist * Math.sin(azimut);
+		Point3D p0 = new Point3D(p);
+		p0.add(new Point3D(dist , e));
+		return p0;
+	}
+
+	private double calVLat(Pacman p , double azimut)
+	{
+		double speed = p.getSpeed();
+		return 90 < azimut && azimut < 270 ? -speed * Math.cos(azimut) : speed * Math.cos(azimut);
+	}
+
+	//private double
 }

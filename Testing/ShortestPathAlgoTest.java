@@ -1,18 +1,11 @@
-import Algorithms.ShortestPathAlgo;
-import Factory.MapFactory;
-import GIS.*;
-import Geom.Point3D;
 import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
-import java.util.LinkedList;
 
 class ShortestPathAlgoTest {
 
     @Test
     void shortestPath()
     {
-        Map m = MapFactory.ArielMap();
+       /* Map m = MapFactory.ArielMap();
         LinkedList<Fruit> FruitList = new LinkedList<>();
         LinkedList<Pacman> PacmanList = new LinkedList<>();
         Game g = new Game(PacmanList , FruitList , m);
@@ -36,7 +29,7 @@ class ShortestPathAlgoTest {
             fruit = IF.next();
             Ppos = m.CoordinateToPixel(fruit.getPosition());
             System.out.println("x: " + Ppos.getX() + "  Y: " + Ppos.getY());
-        }
+        }*/
     }
 
     @Test

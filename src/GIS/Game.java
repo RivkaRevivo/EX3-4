@@ -39,6 +39,13 @@ public class Game
         MyMap = null;
     }
 
+    public Game(Game g)
+    {
+        this.Fruit_list = g.getFruit_listCopy();
+        this.pacman_list = g.getPacman_listCopy();
+        this.MyMap = g.MyMap;
+    }
+
     /**
      * Initialized The Lists using a Csv File
      * @param path the Locating of the Csv File
@@ -208,7 +215,13 @@ public class Game
      */
     public LinkedList<Fruit> getFruit_listCopy()
     {
-        return new LinkedList<>(Fruit_list);
+        //return new LinkedList<>(Fruit_list);
+        LinkedList<Fruit> l = new LinkedList<>();
+        for (Fruit f: this.Fruit_list)
+        {
+            l.add(new Fruit(f.getPosition() , f.getId() , f.getWeight()));
+        }
+        return l;
     }
 
     /**
@@ -217,12 +230,39 @@ public class Game
      */
     public LinkedList<Pacman> getPacman_listCopy()
     {
-        return new LinkedList<>(pacman_list);
+        //return new LinkedList<>(pacman_list);
+        LinkedList<Pacman> l = new LinkedList<>();
+        for (Pacman p: this.pacman_list)
+        {
+            //l.add(new Fruit(f.getPosition() , f.getId() , f.getWeight()));
+            //public Pacman(Point3D position, double[] azimuth,double Speed,double Radius , int id)
+            l.add(new Pacman(p.getPosition() , p.getAzimuth() , p.getSpeed() , p.getRadius() , p.getId()));
+        }
+        return l;
     }
 
     public void ResetLists()
     {
         pacman_list = new LinkedList<>();
         Fruit_list = new LinkedList<>();
+    }
+
+    public int GetPacmanListSize()
+    {
+        return pacman_list.size();
+    }
+
+    public LinkedList<Pacman> getPacman_listOriginal()
+    {
+        return pacman_list;
+    }
+
+    public void RemoveFruitByID(int id)
+    {
+        for(int i = 0; i < Fruit_list.size(); i++)
+        {
+            if(Fruit_list.get(i).getId() == id)
+                Fruit_list.remove(i);
+        }
     }
 }

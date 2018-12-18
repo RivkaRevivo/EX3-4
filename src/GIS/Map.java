@@ -1,6 +1,7 @@
 package GIS;
 
 
+import Coords.MyCoords;
 import Geom.Point3D;
 
 import javax.imageio.ImageIO;
@@ -57,17 +58,19 @@ public class Map
 
 	public Pixel CoordinateToPixel(Point3D cords)
 	{
-		double diffx = cords.x() - min.x();
-		double diffy = cords.y() - min.y();
+		double diffx = Math.abs(cords.x() - min.x());
+		double diffy = Math.abs(cords.y() - min.y());
 
-		double MinMaxdiff_X = max.x() - min.x();
-		double MinMaxdiff_Y = max.y() - min.y();
+		double MinMaxdiff_X = Math.abs(max.x() - min.x());
+		double MinMaxdiff_Y = Math.abs(max.y() - min.y());
 
-		double new_x = (diffx * Pmax.getX()) / MinMaxdiff_X;
-		double new_y = (diffy * Pmax.getY()) / MinMaxdiff_Y;
+		double new_x = Math.abs((diffx * Pmax.getX()) / MinMaxdiff_X);
+		double new_y = Math.abs ((diffy * Pmax.getY()) / MinMaxdiff_Y);
 
-		return new Pixel(new_x,new_y);
+		new_x = Math.round(new_x);
+		new_y = Math.round(new_y);
 
+		return new Pixel((int)new_x,(int)new_y);
 	}
 
 	public Pixel CoordinateToPixel(Point3D cords , int width, int height)
@@ -78,10 +81,13 @@ public class Map
         double MinMaxdiff_X = max.x() - min.x();
         double MinMaxdiff_Y = max.y() - min.y();
 
-        double new_x = (diffx * width) / MinMaxdiff_X;
-        double new_y = (diffy * height) / MinMaxdiff_Y;
+        double new_x = Math.abs((diffx * width) / MinMaxdiff_X);
+        double new_y = Math.abs((diffy * height) / MinMaxdiff_Y);
 
-        return new Pixel(new_x,new_y);
+		new_x = Math.round(new_x);
+		new_y = Math.round(new_y);
+
+        return new Pixel((int)new_x,(int)new_y);
 	}
 
 
@@ -138,6 +144,12 @@ public class Map
 	{
 		return this.Pmax;
 	}
-}
 
-	
+	public double SizeOfPixleInMeter()
+	{
+		MyCoords c = new MyCoords();
+		Point3D firstP = PixelToCoordinate(new Pixel(642 , 0));
+		Point3D SecondP = PixelToCoordinate(new Pixel(642 , 1));
+		return c.distance3d(firstP , SecondP);
+	}
+}

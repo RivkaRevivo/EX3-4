@@ -25,7 +25,7 @@ public class ShortestPathAlgo
         for (int i = 0; i < PacmanList.size(); i++)
         {
             p = new Path();
-            p.add(new Fruit(PacmanList.get(i).getPosition() , -1 , 1 ));
+            /*p.add(new Fruit(PacmanList.get(i).getPosition() , -1 , 1 ));*/
             Paths.add(p);
         }
 
@@ -53,9 +53,9 @@ public class ShortestPathAlgo
         return Paths;
     }
 
-    public static double getmoven(Pacman p,Fruit f)
+    private static double getmoven(Pacman p,Fruit f)
     {
-        MyCoords  c=new MyCoords();
+        MyCoords c = new MyCoords();
 
         double distance=c.distance3d(p.getPosition(),f.getPosition());
         double move=(distance-p.getRadius())/p.getSpeed();

@@ -5,18 +5,22 @@ package GIS;
  */
 public class Pixel
 {
-    private double x;
-    private double y;
+    private int x;
+    private int y;
+    //private int ix;
+    //private int iy;
 
     public Pixel()
     {
 
     }
 
-    public Pixel(double x, double Y)
+    public Pixel(int x, int Y)
     {
         this.x = x;
         this.y = Y;
+        //this.ix = (int)Math.round(x);
+        //this.iy = (int)Math.round(y);
     }
 
     public double getX() {
@@ -27,11 +31,32 @@ public class Pixel
         return y;
     }
 
-    public void setX(double x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public void setY(double y) {
+    public void setY(int y) {
         this.y = y;
     }
+
+    public boolean equals(Pixel p)
+    {
+        return (this.getX() == p.getX()) && (this.getY() == p.getY());
+    }
+
+    /*public int getIx() {
+        return ix;
+    }
+
+    public void setIx(int ix) {
+        this.ix = ix;
+    }
+
+    public int getIy() {
+        return iy;
+    }
+
+    public void setIy(int iy) {
+        this.iy = iy;
+    }*/
 }
