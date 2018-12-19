@@ -1,4 +1,11 @@
+import Algorithms.ShortestPathAlgo;
+import Factory.MapFactory;
+import GIS.GIS_project;
+import GIS.Game;
+import GIS.Path;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
 
 class ShortestPathAlgoTest {
 
@@ -36,5 +43,14 @@ class ShortestPathAlgoTest {
     void getmoven()
     {
 
+    }
+
+    @Test
+    void  getGetPathProject()
+    {
+        Game g = new Game("C:\\Users\\Owner\\EX3-4\\PacmanGame1545219019271.csv" , MapFactory.ArielMap());
+        LinkedList<Path> LP = ShortestPathAlgo.ShortestPath(g);
+        GIS_project pro = ShortestPathAlgo.GetPathProject(LP ,g);
+        System.out.println("FFF");
     }
 }

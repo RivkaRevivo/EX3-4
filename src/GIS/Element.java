@@ -28,6 +28,12 @@ public class Element implements GIS_element
 	//**********Constructor**********//
 
 	public Element() {}
+
+	public Element(Geom_element Pos , Meta_data m)
+	{
+		this._Geom = (Point3D) Pos;
+		this._M = m;
+	}
 	
 	public void ElementSet(String name, String descript, String point, String time)
 	{
@@ -43,7 +49,7 @@ public class Element implements GIS_element
 	private String _Name;
 	private String _Time;
 	private String _Point;
-	private Metadata _M;
+	private Meta_data _M;
 	private Point3D _Geom;
 
 	//**********Getters**********//

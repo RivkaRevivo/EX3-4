@@ -20,6 +20,15 @@ public class Pacman
         this.id = id;
     }
 
+    public Pacman(Pacman p)
+    {
+        this.azimuth = p.getAzimuth();
+        this.position = p.getPosition();
+        this.Radius = p.getRadius();
+        this.Speed = p.getSpeed();
+        this.id = -1;
+    }
+
     public Pacman()
     {
         this.position = null;

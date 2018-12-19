@@ -148,7 +148,7 @@ public class Map
 
 
 	/**
-	 * 
+	 * haversine formula that
 	 * @param p1
 	 * @param p2
 	 * @return
