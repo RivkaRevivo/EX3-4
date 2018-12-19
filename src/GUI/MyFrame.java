@@ -184,6 +184,40 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
         /*else
             {*/
 
+
+        if(GameHasStarted)
+        {
+            LinkedList<Path> CopyPath = new LinkedList<Path>(ShortPath);
+            int j = 0;
+            while (!CopyPath.isEmpty())
+            {
+                int i = 0;
+
+                if(CopyPath.size() > 0 && CopyPath.get(0).size() > 0) {
+                    Pacman p = thisGame.getPacman_listCopy().get(j);
+                    Pixel c1 = thisGame.getMyMap().CoordinateToPixel(p.getPosition(), this.getWidth(), this.getHeight());
+                    Pixel c2 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(0).getPosition(), this.getWidth(), this.getHeight());
+                    g.setColor(Color.RED);
+                    g.drawLine((int) c1.getX() + 9, (int) c1.getY() + 9, (int) c2.getX() + 9, (int) c2.getY() + 9);
+                    g.drawLine((int) c1.getX() + 11, (int) c1.getY() + 11, (int) c2.getX() + 11, (int) c2.getY() + 11);
+                    g.drawLine((int) c1.getX() + 10, (int) c1.getY() + 10, (int) c2.getX() + 10, (int) c2.getY() + 10);
+                }
+                while (CopyPath.get(0).size() > i + 1)
+                {
+                    Pixel c1 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i).getPosition() , this.getWidth() , this.getHeight());
+                    Pixel c2 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i + 1).getPosition() , this.getWidth() , this.getHeight());
+                    g.setColor(Color.RED);
+                    g.drawLine((int)c1.getX() +9 , (int)c1.getY() + 9,(int) c2.getX() + 9, (int) c2.getY()+ 9);
+                    g.drawLine((int)c1.getX()+11 , (int)c1.getY() +11 ,(int) c2.getX()+11 , (int) c2.getY()+11 );
+                    g.drawLine((int)c1.getX() + 10 , (int)c1.getY() +10 ,(int) c2.getX() + 10 , (int) c2.getY() +10);
+                    //g.fillOval((int)c1.getX() , (int)c1.getY() , IconSize , IconSize);
+                    i++;
+                }
+                CopyPath.removeFirst();
+                j++;
+            }
+        }
+
                 IP = thisGame.PacmanIterator();
                 while (IP.hasNext())
                 {
