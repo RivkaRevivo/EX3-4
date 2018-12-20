@@ -10,13 +10,12 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 
 public class Path2Kml
 {
-    private static String Path2Kml(Path path)
+    /*private static String Path2Kml(Path path)
     {
         StringBuilder sb = new StringBuilder();
         int i = 0;
@@ -64,29 +63,59 @@ public class Path2Kml
         {
             e.printStackTrace();
         }
+    }*/
+
+    public static StringBuilder Path2kml(Path path)
+    {
+        StringBuilder SB = new StringBuilder();
+        SB.append("<name>Path</name>");
+        SB.append("<Style id=\"getcolor\">");
+        SB.append("<LineStyle>");
+        SB.append("<color>" + getColor() + "</color>");
+        SB.append("<width>3</width>");
+        SB.append("</LineStyle>");
+        SB.append("</Style>");
+        SB.append("<Placemark>");
+        SB.append("<styleUrl>#getcolor</styleUrl>");
+        SB.append("<LineString>");
+        SB.append("<coordinates>");
+        for(Fruit f: path)
+            SB.append(f.getPosition().y() + "," + f.getPosition().x() + "," + f.getPosition().z());
+        SB.append("</coordinates>");
+        SB.append("</LineString>");
+        SB.append("</Placemark>");
+        return SB;
     }
 
-    public  void PathProject2kml(GIS_project gis_project) throws FileNotFoundException {
+
+    private static String getColor() {
+        double random = Math.random();
+        random = random * 6;
+        String[] color = {"ff0000ff", "ff00ffff", "ffff0000", "ff00ff00", "ff800080", "ff0080ff", "ff336699", "ffff00ff"};
+        return color[(int) random];
+    }
+
+
+    public static void PathProject2kml(GIS_project gis_project , LinkedList<Path> LP) throws FileNotFoundException {
         StringBuilder Builder = new StringBuilder();
         Builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n");
         Builder.append("<kml>" + "\n");
         Builder.append("<Document>" + "\n");
         Builder.append("<Style id=\"pacman\">" + "\n");
         Builder.append("<IconStyle>" + "\n");
-        Builder.append("<Icon>");
-        Builder.append("<href>https://github.com/shaikaikov/EX3-4/blob/master/pacman.png</href>");
-        Builder.append("</Icon>");
-        Builder.append("<hotSpot x=\"32\" y=\"1\" xunits=\"pixels\" yunits=\"pixels\"/>");
+        Builder.append("<color>5014F0FF</color>");
         Builder.append("</IconStyle>");
         Builder.append("</Style>");
         Builder.append("<Style id=\"fruit\">" + "\n");
         Builder.append("<IconStyle>" + "\n");
-        Builder.append("<Icon>");
-        Builder.append("<href>https://github.com/shaikaikov/EX3-4/blob/master/fruit.png</href>");
-        Builder.append("</Icon>");
-        Builder.append("<hotSpot x=\"32\" y=\"1\" xunits=\"pixels\" yunits=\"pixels\"/>");
+        Builder.append("<color>501400FF</color>");
         Builder.append("</IconStyle>");
         Builder.append("</Style>");
+
+        for (Path path: LP)
+            Builder.append(Path2Kml.Path2kml(path));
+
+
         for (GIS_layer gis_layer: gis_project)
         {
             Builder.append("<TimeSpan>" + "\n");
@@ -110,7 +139,7 @@ public class Path2Kml
         PW.write(Builder.toString());
         PW.close();
     }
-    public StringBuilder LayerProject2kml(GIS_layer gis_layer , StringBuilder Builder)
+    public static StringBuilder LayerProject2kml(GIS_layer gis_layer , StringBuilder Builder)
     {
         for (GIS_element gis_element: gis_layer)
         {
@@ -123,10 +152,10 @@ public class Path2Kml
             DateFormat DF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.mmm'Z'");
             Builder.append("<when>" + DF.format(date) + "</when>" + "\n");
             Builder.append("</TimeStamp>" + "\n");
-            /*if (gis_element.getData().get_Orientation() != null)
+            if (gis_element.getData().get_Orientation() != null)
                 Builder.append("<styleUrl>#pacman</styleUrl>");
             else
-                Builder.append("<styleUrl>#fruit</styleUrl>");*/
+                Builder.append("<styleUrl>#fruit</styleUrl>");
             Builder.append("<description>");
             Builder.append(gis_element.getData().getDescription());
             Builder.append("Date: <b>" + DF.format(date) + "</b><br/>");
@@ -148,9 +177,8 @@ public class Path2Kml
         Game g = new Game("PacmanGame1545219019271.csv" , MapFactory.ArielMap());
         LinkedList<Path> LP = ShortestPathAlgo.ShortestPath(g);
         GIS_project GP = ShortestPathAlgo.GetPathProject(LP , g);
-        Path2Kml P2K = new Path2Kml();
         try {
-            P2K.PathProject2kml(GP);
+            PathProject2kml(GP ,LP);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

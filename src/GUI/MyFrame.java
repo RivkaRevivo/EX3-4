@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -25,10 +26,10 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
     private int x = -1, y = -1 , pacmanID = 0 , fruitID = 0;
     private int buttonClicked = -1;
     private Game thisGame,GameCopy;
-    private boolean GameHasStarted = false;
+    private boolean GameHasStarted = false; // a boolean that check if the game has Started in order the paint accordingly
     private LinkedList<Path> ShortPath = null ,PathsCopy = null;
 
-    private int IconSize = 20;
+    private int IconSize = 20; //The Icon Size Of the Pacman and Fruit
 
     public MyFrame()
     {
@@ -104,7 +105,15 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (PathsCopy != null)
-                    Path2Kml.Paths2kml(PathsCopy);
+                {
+                    GIS_project GIP = ShortestPathAlgo.GetPathProject(PathsCopy , GameCopy);
+                    try {
+                        Path2Kml.PathProject2kml(GIP , PathsCopy);
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+
+                }
             }
         });
 
@@ -138,61 +147,22 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
 
     public void paint(Graphics g)
     {
+        //Draw The Map On the Frame
         g.drawImage(MapImg,0,0,this.getWidth(),this.getHeight(),this);
         Iterator<Pacman> IP;
 
-       /* if (GameHasStarted)
-        {
 
-            IP = thisGame.PacmanIterator();
-
-            int i = 0;
-            Pixel LastPos;
-            while (IP.hasNext())
-            {
-                if (!ShortPath.get(i).isEmpty())
-                    LastPos = thisGame.getMyMap().CoordinateToPixel(ShortPath.get(i).getLast().getPosition() , this.getWidth(),this.getHeight());
-                else
-                    LastPos = thisGame.getMyMap().CoordinateToPixel(thisGame.getPacman_listCopy().get(i).getPosition() , this.getWidth() , this.getHeight());
-                g.drawImage(PacmanImg, (int) LastPos.getX() , (int) LastPos.getY(),IconSize,IconSize,this);
-                IP.next();
-                i++;
-            }
-
-            LinkedList<Path> CopyPath = new LinkedList<Path>(ShortPath);
-
-
-            while (!CopyPath.isEmpty())
-            {
-                i = 0;
-                while (CopyPath.get(0).size() > i + 1)
-                {
-                    Pixel c1 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i).getPosition() , this.getWidth() , this.getHeight());
-                    Pixel c2 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i + 1).getPosition() , this.getWidth() , this.getHeight());
-                    g.setColor(Color.RED);
-                    g.drawLine((int)c1.getX() +9 , (int)c1.getY() + 9,(int) c2.getX() + 9, (int) c2.getY()+ 9);
-                    g.drawLine((int)c1.getX()+11 , (int)c1.getY() +11 ,(int) c2.getX()+11 , (int) c2.getY()+11 );
-                    g.drawLine((int)c1.getX() + 10 , (int)c1.getY() +10 ,(int) c2.getX() + 10 , (int) c2.getY() +10);
-                    g.fillOval((int)c1.getX() , (int)c1.getY() , IconSize , IconSize);
-                    i++;
-                }
-                CopyPath.removeFirst();
-            }
-
-            GameHasStarted = false;
-        }*/
-        /*else
-            {*/
-
-
+        //If we press Start Game
         if(GameHasStarted)
         {
             LinkedList<Path> CopyPath = new LinkedList<Path>(ShortPath);
             int j = 0;
+            //Draw The Lines between on the Paths
             while (!CopyPath.isEmpty())
             {
                 int i = 0;
 
+                //Draw Line Between Pacmans To next Fruit
                 if(CopyPath.size() > 0 && CopyPath.get(0).size() > 0) {
                     Pacman p = thisGame.getPacman_listCopy().get(j);
                     Pixel c1 = thisGame.getMyMap().CoordinateToPixel(p.getPosition(), this.getWidth(), this.getHeight());
@@ -202,15 +172,17 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                     g.drawLine((int) c1.getX() + 11, (int) c1.getY() + 11, (int) c2.getX() + 11, (int) c2.getY() + 11);
                     g.drawLine((int) c1.getX() + 10, (int) c1.getY() + 10, (int) c2.getX() + 10, (int) c2.getY() + 10);
                 }
+                //Draw Line Between All the Fruits on the Paths
                 while (CopyPath.get(0).size() > i + 1)
                 {
                     Pixel c1 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i).getPosition() , this.getWidth() , this.getHeight());
                     Pixel c2 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i + 1).getPosition() , this.getWidth() , this.getHeight());
                     g.setColor(Color.RED);
+                    //We Used 3 drawLine in order to make the line look Thicker. and we did the +9 , +11 and +10
+                    //  in order to make the line appear from the center of the pacman/fruit
                     g.drawLine((int)c1.getX() +9 , (int)c1.getY() + 9,(int) c2.getX() + 9, (int) c2.getY()+ 9);
                     g.drawLine((int)c1.getX()+11 , (int)c1.getY() +11 ,(int) c2.getX()+11 , (int) c2.getY()+11 );
                     g.drawLine((int)c1.getX() + 10 , (int)c1.getY() +10 ,(int) c2.getX() + 10 , (int) c2.getY() +10);
-                    //g.fillOval((int)c1.getX() , (int)c1.getY() , IconSize , IconSize);
                     i++;
                 }
                 CopyPath.removeFirst();
@@ -219,17 +191,16 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
         }
 
                 IP = thisGame.PacmanIterator();
+
+        //redrawn each pacman every repaint
                 while (IP.hasNext())
                 {
                     Pacman p = IP.next();
                     Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition(), this.getWidth(), this.getHeight());
                     g.drawImage(PacmanImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
 
-                    //System.out.println("Pacman " + p.getId() + " New Position: x: " + p.getPosition().x() + " y: " + p.getPosition().y());
-                    //System.out.println("Pacman " + p.getId() + " New Pixels: x: " + pos.getX() + " y: " + pos.getY());
-
                 }
-
+         //redrawn each Fruit every repaint
                 Iterator<Fruit> IF = thisGame.FruitIterator();
                 while (IF.hasNext())
                 {
@@ -239,8 +210,10 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                 }
 
 
+        //if we have clicked on a the mouse
             if (x != -1 && y != -1)
             {
+                //if we clicked on the right click we draw a new pacman
                 if (buttonClicked == 1)
                 {
                     g.drawImage(PacmanImg, x, y, IconSize, IconSize, this);
@@ -251,6 +224,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                     System.out.println("Pacman " + (pacmanID - 1) + " Original Position: x: " + PixelToCoord.x() + " y: " + PixelToCoord.y());
                     System.out.println("Pacman " + (pacmanID - 1) + " Original Pixels: x: " + x + " y: " + y);
                 }
+                //if we clicke on the left click we draw a new fruit
                 else if (buttonClicked == 3)
                 {
 
@@ -272,11 +246,10 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
     @Override
     public void mouseClicked(MouseEvent arg)
     {
-
+        //if a mouse has been clicked we save the Clicked pixels and repaint at that point a new pacman or fruit
         x = arg.getX();
         y = arg.getY();
         buttonClicked = arg.getButton();
-
         repaint(x,y,IconSize,IconSize);
     }
 
@@ -319,6 +292,10 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
     public void mouseExited(MouseEvent e) {
     }
 
+    /**
+     *
+     * @return Return The Map that is the background of this frame
+     */
     public BufferedImage getMapImg()
     {
         return MapImg;
@@ -340,9 +317,8 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
     {
         if(GameHasStarted)
         {
-            double speed;
-            boolean finishRun = true;
-            int x = 0,y = 0;
+            boolean finishRun;
+            int x,y;
             Point3D CurrnetPacmanPos , CurrnetFruitPos;
             GameCopy = new Game(thisGame);
             do
@@ -351,17 +327,16 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                 for (int i = 0; i < thisGame.GetPacmanListSize(); i++) {
                     if (!ShortPath.get(i).isEmpty()) {
                         finishRun = false;
+                        //we get the position of the pacman and the fruit he is going after
                         CurrnetPacmanPos = thisGame.getPacman_listCopy().get(i).getPosition();
                         CurrnetFruitPos = ShortPath.get(i).getFirst().getPosition();
-                        speed = thisGame.getPacman_listCopy().get(i).getSpeed();
 
-
+                        //we Convert the positions to pixels
                         Pixel CurrnetPacmanPosPixel = thisGame.getMyMap().CoordinateToPixel(CurrnetPacmanPos, this.getWidth(), this.getHeight());
                         Pixel CurrnetFruitPosPixel = thisGame.getMyMap().CoordinateToPixel(CurrnetFruitPos, this.getWidth(), this.getHeight());
 
-                        //System.out.println("Fruit Pixel:  x:" + CurrnetFruitPosPixel.getX() + " y:" + CurrnetFruitPosPixel.getY());
 
-
+                        //we choose in witch direction to move the pacman according to the y and x axis
                         if (CurrnetPacmanPosPixel.getX() == CurrnetFruitPosPixel.getX())
                             x = 0;
                         else if (CurrnetPacmanPosPixel.getX() < CurrnetFruitPosPixel.getX())
@@ -372,21 +347,24 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                         else if (CurrnetPacmanPosPixel.getY() < CurrnetFruitPosPixel.getY())
                             y = 1;
                         else y = -1;
+                        //and we move the pacman 1 pixel in the direction of the fruit
                         int new_x = (int)(CurrnetPacmanPosPixel.getX() + (x));
                         int new_y = (int)(CurrnetPacmanPosPixel.getY() + (y));
                         CurrnetPacmanPosPixel.setX(new_x);
                         CurrnetPacmanPosPixel.setY(new_y);
 
+                        //we convert back to coordinate
                         Point3D NewPosition = thisGame.getMyMap().PixelToCoordinate(CurrnetPacmanPosPixel, this.getWidth(), this.getHeight());
 
+                        //then we change the position of the pacman to its new position
                         thisGame.getPacman_listOriginal().get(i).setPosition(NewPosition);
 
+                        //if the pacman has arrived to the fruit we remove the fruit from the game
                         if (CurrnetPacmanPosPixel.equals(CurrnetFruitPosPixel)) {
                             thisGame.RemoveFruitByID(ShortPath.get(i).getFirst().getId());
                             ShortPath.get(i).removeFirst();
                         }
 
-                        //System.out.println("Change To New Position");
                     }
                 }
                 repaint();
