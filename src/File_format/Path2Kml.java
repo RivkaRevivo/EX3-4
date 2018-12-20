@@ -13,59 +13,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
+
+/**
+ * A Class That Convert A Gis Project in to an kml filr
+ */
 public class Path2Kml
 {
-    /*private static String Path2Kml(Path path)
-    {
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        StringBuilder date = new StringBuilder();
-        for (Fruit f: path)
-        {
-            sb.append("<Placemark>" + "\n");
-            sb.append("<name>" + i +  " Location"  + " </name>" + "\n");
-            sb.append(" <TimeStamp>" + "\n");
-            date.append(dateFormat.format(Calendar.getInstance().getTime()));
-            date.insert(10 , "T");
-            date.append("Z");
-            sb.append("<when>" + date.toString() + "</when>" + "\n");
-            sb.append("</TimeStamp>" + "\n");
-            sb.append("<Point>" + "\n");
-            sb.append("<coordinates>" + f.getPosition().y() + "," + f.getPosition().x() + "," + f.getPosition().z() + "</coordinates>");
-            sb.append("</Point>" + "\n");
-            sb.append("</Placemark>" + "\n");
-            i++;
-        }
 
-        return sb.toString();
-    }
-
-    public static void Paths2kml(LinkedList<Path> LP)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n");
-        sb.append("<kml>" + "\n");
-        sb.append("<Document>" + "\n");
-        for (Path p: LP)
-        {
-            sb.append(Path2Kml(p));
-        }
-        sb.append("</Document>" + "\n");
-        sb.append("</kml>");
-
-        try
-        {
-            PrintWriter pw = new PrintWriter(new File("KmlFile" + System.currentTimeMillis() + ".kml"));
-            pw.write(sb.toString());
-            pw.close();
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-    }*/
-
-    public static StringBuilder Path2kml(Path path)
+    /**
+     * turn a Path in to its kml Description
+     * @param path The path needed to turn into kml
+     * @return A StringBuilder contains Representation of the path in a kml format
+     */
+    private static StringBuilder Path2kml(Path path)
     {
         StringBuilder SB = new StringBuilder();
         SB.append("<name>Path</name>");
@@ -87,7 +47,10 @@ public class Path2Kml
         return SB;
     }
 
-
+    /**
+     * Return a random color in String aabbggrr format
+     * @return random color
+     */
     private static String getColor() {
         double random = Math.random();
         random = random * 6;
@@ -95,7 +58,12 @@ public class Path2Kml
         return color[(int) random];
     }
 
-
+    /**
+     * Create a kml file named ProjectKml.km in the project folder out The gis Project and the List of PAth
+     * @param gis_project The Gis Project the needed to be created into kml
+     * @param LP the List of paths of Gis Project needed to be inserted into the kml file
+     * @throws FileNotFoundException Thrown if file creating failed
+     */
     public static void PathProject2kml(GIS_project gis_project , LinkedList<Path> LP) throws FileNotFoundException {
         StringBuilder Builder = new StringBuilder();
         Builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n");
@@ -139,7 +107,7 @@ public class Path2Kml
         PW.write(Builder.toString());
         PW.close();
     }
-    public static StringBuilder LayerProject2kml(GIS_layer gis_layer , StringBuilder Builder)
+    private static StringBuilder LayerProject2kml(GIS_layer gis_layer, StringBuilder Builder)
     {
         for (GIS_element gis_element: gis_layer)
         {

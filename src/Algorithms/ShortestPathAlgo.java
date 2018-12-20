@@ -8,6 +8,12 @@ import Geom.Point3D;
 import java.util.LinkedList;
 
 public class ShortestPathAlgo {
+
+    /**
+     * Calculate Path of fruit for each pacman
+     * @param g The Game To Calculate on
+     * @return A List of Path in the size of number of Pacman. each path correspond with its pacman in the same position in the pacman list
+     */
     public static LinkedList<Path> ShortestPath(Game g) {
         LinkedList<Path> Paths = new LinkedList<>();
         LinkedList<Fruit> FruitList = g.getFruit_listCopy();
@@ -49,7 +55,7 @@ public class ShortestPathAlgo {
 
 //	the method 1 sela
 
-
+/*
         double[] Sum_Move_Pacman = new double[PacmanList.size()];
         while (!FruitList.isEmpty()) {
             for (int i = 0; i < PacmanList.size(); i++) {
@@ -148,7 +154,32 @@ public class ShortestPathAlgo {
 
         }*/
 
-        System.out.println("Finish calc Paths");
+        double Max_Sum=Double.MIN_VALUE;
+        double[] Sum_Move_Pacman = new double[PacmanList.size()];
+        while (!FruitList.isEmpty()) {
+            for (int i = 0; i < PacmanList.size(); i++) {
+                for (int j = 0; j < FruitList.size(); j++) {
+                    if(Nearmove>getmoven(PacmanList.get(i),FruitList.get(j))){
+                        Nearmove=getmoven(PacmanList.get(i),FruitList.get(j));
+                        tempFruitPos=j;
+                        tempPacmanPos=i;
+                    }
+                }
+                if(!FruitList.isEmpty()) {
+                    Sum_Move_Pacman[tempPacmanPos]=Sum_Move_Pacman[tempPacmanPos]+Nearmove;
+                    if(Max_Sum<Sum_Move_Pacman[tempPacmanPos]){
+                        Max_Sum=Sum_Move_Pacman[tempPacmanPos];
+                        fr=new Fruit(FruitList.get(tempFruitPos).getPosition(),FruitList.get(tempFruitPos).getId(),FruitList.get(tempFruitPos).getWeight());
+                    }
+                    Paths.get(tempPacmanPos).addLast(FruitList.get(tempFruitPos));
+                    PacmanList.get(tempPacmanPos).setPosition(FruitList.get(tempFruitPos).getPosition());
+                    FruitList.remove(tempFruitPos);
+                    Nearmove = Double.MAX_VALUE;
+                }
+            }
+        }
+
+
         return Paths;
     }
 
@@ -206,9 +237,12 @@ public class ShortestPathAlgo {
 */
 
 
-
-
-
+    /**
+     * calculate the time for the pacman to reach the fruit
+     * @param p pacman
+     * @param f fruit
+     * @return the time in second it take the pacman to reach the fruit
+     */
     private static double getmoven(Pacman p, Fruit f) {
         MyCoords c = new MyCoords();
 
@@ -217,6 +251,11 @@ public class ShortestPathAlgo {
         return move;
     }
 
+    /**
+     * return a deep copy of LP
+     * @param LP the List needed to be copy
+     * @return a new list where every item is a copy of the item in LP
+     */
     public static LinkedList<Path> GetCopyPaths(LinkedList<Path> LP) {
         LinkedList<Path> PA = new LinkedList<>();
         for (int i = 0; i < LP.size(); i++) {
@@ -225,6 +264,13 @@ public class ShortestPathAlgo {
         return PA;
     }
 
+
+    /**
+     * Create a Gis Project out of List of Paths
+     * @param LP the List of Path that will be created as project
+     * @param g the game where the List
+     * @return A Gis Project Of the List of Path
+     */
     public static GIS_project GetPathProject(LinkedList<Path> LP, Game g) {
         Meta_data data = new Metadata();
         GIS_project Game_Porject = new Project(data);
@@ -272,6 +318,11 @@ public class ShortestPathAlgo {
         return Game_Porject;
     }
 
+    /**
+     * return The Largest Path in a List of Path based on number of items in each path
+     * @param lp The List of Path
+     * @return The Path with the most fruits
+     */
     private static int GetLongestPathsize(LinkedList<Path> lp)
     {
         int Max = -1;
@@ -283,17 +334,12 @@ public class ShortestPathAlgo {
         return Max;
     }
 
-    /*private static Path GetLongestPath(LinkedList<Path> lp)
-    {
-        Path Max = lp.get(0);
-        for (Path p : lp)
-        {
-            if(p.size() > Max.size())
-                Max = p;
-        }
-        return Max;
-    }*/
-
+    /**
+     * Calculate the Number of second needed the finish the game, based on the longest path and the speed of the pacmans
+     * @param lp the Linked List of paths. path to each pacman
+     * @param game the game where LP is played on
+     * @return the time it will take for the game to finish in the real world.
+     */
     public static int GetGameTime(LinkedList<Path> lp , Game game)
     {
         Path Max = lp.get(0);

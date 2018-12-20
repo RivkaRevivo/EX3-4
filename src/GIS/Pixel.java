@@ -1,62 +1,70 @@
 package GIS;
 
 /**
- * A class Use To Represent a Pixel on The Map
+ * this class represent point of pixel in x and y
+ * we have here constructors of pixel and functions of getters and setters
+ *
+ * @author shai and sela
  */
 public class Pixel
 {
-    private int x;
-    private int y;
-    //private int ix;
-    //private int iy;
+    private double x;
+    private double y;
 
+    /**
+     * defultive constructor
+     *
+     */
     public Pixel()
     {
 
     }
 
-    public Pixel(int x, int Y)
+    /**
+     *  constructor
+     * @param x we set
+     * @param Y we set
+     */
+
+    public Pixel(double x, double Y)
     {
         this.x = x;
         this.y = Y;
-        //this.ix = (int)Math.round(x);
-        //this.iy = (int)Math.round(y);
     }
+
+    /**
+     * method get of x
+     * @return x
+     */
 
     public double getX() {
         return x;
     }
 
+    /**
+     * method get of y
+     * @return y
+     */
+
     public double getY() {
         return y;
     }
 
-    public void setX(int x) {
+    /**
+     * method to set x
+     * @param x to set
+     */
+
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    /**
+     * method to set y
+     * @param y to set
+     */
+
+    public void setY(double y) {
         this.y = y;
     }
-
-    public boolean equals(Pixel p)
-    {
-        return (this.getX() == p.getX()) && (this.getY() == p.getY());
-    }
-
-    /*public int getIx() {
-        return ix;
-    }
-
-    public void setIx(int ix) {
-        this.ix = ix;
-    }
-
-    public int getIy() {
-        return iy;
-    }
-
-    public void setIy(int iy) {
-        this.iy = iy;
-    }*/
 }
