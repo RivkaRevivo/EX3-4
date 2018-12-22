@@ -39,6 +39,10 @@ public class Game
         MyMap = null;
     }
 
+    /**
+     * deep copy constructor to game
+     * @param g the game to be copy
+     */
     public Game(Game g)
     {
         this.Fruit_list = g.getFruit_listCopy();
@@ -241,22 +245,37 @@ public class Game
         return l;
     }
 
+    /**
+     * Reset both the pacman List and The Fruit List
+     */
     public void ResetLists()
     {
         pacman_list = new LinkedList<>();
         Fruit_list = new LinkedList<>();
     }
 
+    /**
+     * return the Size of the Pacman List
+     * @return
+     */
     public int GetPacmanListSize()
     {
         return pacman_list.size();
     }
 
+    /**
+     * return The Original Pacman List of this Game
+     * @return Pacman List
+     */
     public LinkedList<Pacman> getPacman_listOriginal()
     {
         return pacman_list;
     }
 
+    /**
+     * remove fruit by its id From This Game. if no fruit exist by this id then do nothing
+     * @param id The Id of the fruit to be remove
+     */
     public void RemoveFruitByID(int id)
     {
         for(int i = 0; i < Fruit_list.size(); i++)

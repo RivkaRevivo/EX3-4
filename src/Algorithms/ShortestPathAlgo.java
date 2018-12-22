@@ -23,7 +23,6 @@ public class ShortestPathAlgo {
         int tempPacmanPos = 0;
         Path p;
         double Nearmove = Double.MAX_VALUE;
-        Fruit fr = null;
 
         for (int i = 0; i < PacmanList.size(); i++) {
             p = new Path();
@@ -31,131 +30,6 @@ public class ShortestPathAlgo {
             Paths.add(p);
         }
 
-/*
-        while (!FruitList.isEmpty()) {
-            for (int i = 0; i < PacmanList.size(); i++) {
-                for (int j = 0; j < FruitList.size(); j++) {
-                    if (Nearmove > getmoven(PacmanList.get(i), FruitList.get(j))) {
-                        Nearmove = getmoven(PacmanList.get(i), FruitList.get(j));
-                        fr = FruitList.get(j);
-                        tempFruitPos = j;
-                        tempPacmanPos = i;
-                    }
-                }
-            }
-            Paths.get(tempPacmanPos).addLast(fr);
-            PacmanList.get(tempPacmanPos).setPosition(fr.getPosition());
-            FruitList.remove(tempFruitPos);
-            Nearmove = Double.MAX_VALUE;
-        }
-        return Paths;
-    }
-
-*/
-
-//	the method 1 sela
-
-/*
-        double[] Sum_Move_Pacman = new double[PacmanList.size()];
-        while (!FruitList.isEmpty()) {
-            for (int i = 0; i < PacmanList.size(); i++) {
-                for (int j = 0; j < FruitList.size(); j++) {
-                    //if(fr.getPosition().equals(FruitList.get(j).getPosition())) {
-                        if (Nearmove > getmoven(PacmanList.get(i), FruitList.get(j))) {
-
-                            if (getmoven(PacmanList.get(tempPacmanPos), FruitList.get(j)) < getmoven(PacmanList.get(i), FruitList.get(j))) {
-                                if (Sum_Move_Pacman[tempPacmanPos] + getmoven(PacmanList.get(tempPacmanPos), FruitList.get(j)) <= Sum_Move_Pacman[i] + getmoven(PacmanList.get(i), FruitList.get(j))) {
-                                    Nearmove = getmoven(PacmanList.get(tempPacmanPos), FruitList.get(j));
-                                    fr = FruitList.get(j);
-                                    tempFruitPos = j;
-                                    //tempPacmanPos = tempPacmanPos;
-
-                                } else {
-                                    Nearmove = getmoven(PacmanList.get(i), FruitList.get(j));
-                                    fr = FruitList.get(j);
-                                    tempFruitPos = j;
-                                    tempPacmanPos = i;
-
-                                }
-                            } else {
-                                if (Sum_Move_Pacman[tempPacmanPos] + getmoven(PacmanList.get(tempPacmanPos), FruitList.get(j)) < Sum_Move_Pacman[i] + getmoven(PacmanList.get(i), FruitList.get(j))) {
-                                    Nearmove = getmoven(PacmanList.get(tempPacmanPos), FruitList.get(j));
-                                    fr = FruitList.get(j);
-                                    tempFruitPos = j;
-                                    //tempPacmanPos = i;
-
-
-                                } else {
-                                    Nearmove = getmoven(PacmanList.get(i), FruitList.get(j));
-                                    fr = FruitList.get(j);
-                                    tempFruitPos = j;
-                                    tempPacmanPos = i;
-
-                                }
-                            }
-
-                        }
-                    //}
-                }
-            }
-            Sum_Move_Pacman[tempPacmanPos] = Sum_Move_Pacman[tempPacmanPos] + Nearmove;
-            Paths.get(tempPacmanPos).addLast(fr);
-            PacmanList.get(tempPacmanPos).setPosition(fr.getPosition());
-            FruitList.remove(tempFruitPos);
-            Nearmove = Double.MAX_VALUE;
-
-        }
-
-///////////////////////////////rebuild/////////////////////
-
-
-        /*while (!FruitList.isEmpty()) {
-            for (int i = 0; i < PacmanList.size(); i++) {
-                for (int j = 0; j < FruitList.size(); j++) {
-                    if(Nearmove>getmoven(PacmanList.get(i), FruitList.get(j))){
-                        Nearmove=getmoven(PacmanList.get(i), FruitList.get(j));
-
-                        for (int s = 0; s < PacmanList.size(); s++) {
-                        if(Nearmove>getmoven(PacmanList.get(s),FruitList.get(j))){
-                             double Nearmoveforp=getmoven(PacmanList.get(s),FruitList.get(j));
-
-                            for (int r = 0; r < FruitList.size(); r++) {
-                                if(Nearmoveforp>getmoven(PacmanList.get(s),FruitList.get(r))){
-                                    Nearmove=getmoven(PacmanList.get(i), FruitList.get(j));
-                                    tempPacmanPos=i;
-                                    tempFruitPos=j;
-                                    fr=FruitList.get(j);
-                                   break;
-                                }
-                                else{
-                                    Nearmove = Double.MAX_VALUE;
-                                }
-                            }
-                            if(Nearmove ==Double.MAX_VALUE){
-                                break;
-                            }
-                        }
-                        else{
-                            Nearmove=getmoven(PacmanList.get(i), FruitList.get(j));
-                            tempPacmanPos=i;
-                            tempFruitPos=j;
-                            fr=FruitList.get(j);
-                        }
-                        }
-                    }
-                }
-                Paths.get(tempPacmanPos).addLast(fr);
-                PacmanList.get(tempPacmanPos).setPosition(fr.getPosition());
-                if(!FruitList.isEmpty())
-                    break;
-                FruitList.remove(tempFruitPos);
-                Nearmove = Double.MAX_VALUE;
-            }
-
-        }*/
-
-        double Max_Sum=Double.MIN_VALUE;
-        double[] Sum_Move_Pacman = new double[PacmanList.size()];
         while (!FruitList.isEmpty()) {
             for (int i = 0; i < PacmanList.size(); i++) {
                 for (int j = 0; j < FruitList.size(); j++) {
@@ -165,77 +39,21 @@ public class ShortestPathAlgo {
                         tempPacmanPos=i;
                     }
                 }
-                if(!FruitList.isEmpty()) {
-                    Sum_Move_Pacman[tempPacmanPos]=Sum_Move_Pacman[tempPacmanPos]+Nearmove;
-                    if(Max_Sum<Sum_Move_Pacman[tempPacmanPos]){
-                        Max_Sum=Sum_Move_Pacman[tempPacmanPos];
-                        fr=new Fruit(FruitList.get(tempFruitPos).getPosition(),FruitList.get(tempFruitPos).getId(),FruitList.get(tempFruitPos).getWeight());
-                    }
+
+                if(!FruitList.isEmpty())
+                {
                     Paths.get(tempPacmanPos).addLast(FruitList.get(tempFruitPos));
                     PacmanList.get(tempPacmanPos).setPosition(FruitList.get(tempFruitPos).getPosition());
                     FruitList.remove(tempFruitPos);
                     Nearmove = Double.MAX_VALUE;
+
                 }
-            }
-        }
 
-
-        return Paths;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-//the method 2 shai
-
-
-        while (!FruitList.isEmpty())
-        {
-            for (int i = 0; i < PacmanList.size(); i++)
-            {
-                for (int j = 0; j < FruitList.size(); j++)
-                {
-                    if (Nearmove > getmoven(PacmanList.get(i), FruitList.get(j)))
-                    {
-                        Nearmove = getmoven(PacmanList.get(i), FruitList.get(j));
-                        fr = FruitList.get(j);
-                        tempFruitPos = j;
-                        tempPacmanPos = i;
-                    }
-                }
-                if(FruitList.size()!=0) {
-                    Paths.get(tempPacmanPos).addLast(fr);
-                    PacmanList.get(tempPacmanPos).setPosition(fr.getPosition());
-                    FruitList.remove(tempFruitPos);
-                    Nearmove = Double.MAX_VALUE;
-                }
             }
 
-
         }
-
         return Paths;
-
     }
-
-
-
-
-*/
-
 
     /**
      * calculate the time for the pacman to reach the fruit

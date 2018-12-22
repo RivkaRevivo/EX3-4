@@ -125,7 +125,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                 ShortPath = ShortestPathAlgo.ShortestPath(thisGame);
                 GameHasStarted = true;
                 PathsCopy = ShortestPathAlgo.GetCopyPaths( ShortPath);
-                System.out.println("Game Time in second:" + ShortestPathAlgo.GetGameTime(ShortPath,thisGame));
+                System.out.println("Real Life Game Time in second:" + ShortestPathAlgo.GetGameTime(ShortPath,thisGame));
                 Thread t = new Thread(temp);
                 t.start();
             }
@@ -190,51 +190,51 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
             }
         }
 
-                IP = thisGame.PacmanIterator();
+        IP = thisGame.PacmanIterator();
 
         //redrawn each pacman every repaint
-                while (IP.hasNext())
-                {
-                    Pacman p = IP.next();
-                    Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition(), this.getWidth(), this.getHeight());
-                    g.drawImage(PacmanImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
+        while (IP.hasNext())
+        {
+            Pacman p = IP.next();
+            Pixel pos = thisGame.getMyMap().CoordinateToPixel(p.getPosition(), this.getWidth(), this.getHeight());
+            g.drawImage(PacmanImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
 
-                }
-         //redrawn each Fruit every repaint
-                Iterator<Fruit> IF = thisGame.FruitIterator();
-                while (IF.hasNext())
-                {
-                Fruit f = IF.next();
-                Pixel pos = thisGame.getMyMap().CoordinateToPixel(f.getPosition(), this.getWidth(), this.getHeight());
-                g.drawImage(FruitImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
-                }
+        }
+        //redrawn each Fruit every repaint
+        Iterator<Fruit> IF = thisGame.FruitIterator();
+        while (IF.hasNext())
+        {
+            Fruit f = IF.next();
+            Pixel pos = thisGame.getMyMap().CoordinateToPixel(f.getPosition(), this.getWidth(), this.getHeight());
+            g.drawImage(FruitImg, (int) pos.getX(), (int) pos.getY(), IconSize, IconSize, this);
+        }
 
 
         //if we have clicked on a the mouse
-            if (x != -1 && y != -1)
+        if (x != -1 && y != -1)
+        {
+            //if we clicked on the right click we draw a new pacman
+            if (buttonClicked == 1)
             {
-                //if we clicked on the right click we draw a new pacman
-                if (buttonClicked == 1)
-                {
-                    g.drawImage(PacmanImg, x, y, IconSize, IconSize, this);
-                    buttonClicked = -1;
-                    Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x, y), this.getWidth(), this.getHeight());
-                    thisGame.AddPacman(new Pacman(PixelToCoord, null, 1, 1, pacmanID));
-                    pacmanID++;
-                    System.out.println("Pacman " + (pacmanID - 1) + " Original Position: x: " + PixelToCoord.x() + " y: " + PixelToCoord.y());
-                    System.out.println("Pacman " + (pacmanID - 1) + " Original Pixels: x: " + x + " y: " + y);
-                }
-                //if we clicke on the left click we draw a new fruit
-                else if (buttonClicked == 3)
-                {
-
-                    g.drawImage(FruitImg, x, y, IconSize, IconSize, this);
-                    buttonClicked = -1;
-                    Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x, y), this.getWidth(), this.getHeight());
-                    thisGame.AddFruit(new Fruit(PixelToCoord, fruitID, 1));
-                    fruitID++;
-                }
+                g.drawImage(PacmanImg, x, y, IconSize, IconSize, this);
+                buttonClicked = -1;
+                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x, y), this.getWidth(), this.getHeight());
+                thisGame.AddPacman(new Pacman(PixelToCoord, null, 1, 1, pacmanID));
+                pacmanID++;
+                System.out.println("Pacman " + (pacmanID - 1) + " Original Position: x: " + PixelToCoord.x() + " y: " + PixelToCoord.y());
+                System.out.println("Pacman " + (pacmanID - 1) + " Original Pixels: x: " + x + " y: " + y);
             }
+            //if we clicke on the left click we draw a new fruit
+            else if (buttonClicked == 3)
+            {
+
+                g.drawImage(FruitImg, x, y, IconSize, IconSize, this);
+                buttonClicked = -1;
+                Point3D PixelToCoord = thisGame.getMyMap().PixelToCoordinate(new Pixel(x, y), this.getWidth(), this.getHeight());
+                thisGame.AddFruit(new Fruit(PixelToCoord, fruitID, 1));
+                fruitID++;
+            }
+        }
         /*}*/
     }
 
