@@ -28,11 +28,11 @@ public class Pixel
         this.y = Y;
     }
 
-    public double getX() {
+    public int getX() {
         return x;
     }
 
-    public double getY() {
+    public int getY() {
         return y;
     }
 
