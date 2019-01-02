@@ -24,7 +24,6 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
     Play play;
     BufferedImage MapImg,PacmanImg, FruitImg,OurPacmanImg , GhostImg;
     Game game;//boaz game
-    //Map map;
     Map map;
     int FruitIconSize = 20 , PacmanIconSize = 25;
     double PacmanAngle = 90;
@@ -48,16 +47,20 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
 
     private void initGUI()
     {
-        game = new Game("data/Ex4_OOP_example1.csv");
+        MyPanel panel = new MyPanel();
+        add(panel);
+        game = new Game("data/Ex4_OOP_example5.csv");
         play = new Play(game);
         map = MapFactory.BoazArielMap();
         play.setInitLocation( 32.1040,35.2061);
 
         MenuBar menuBar = new MenuBar();
         Menu Start_menu = new Menu("Game Menu");
-        MenuItem SI1 = new MenuItem("Start");
+        MenuItem SI1 = new MenuItem("Start manual game");
+        MenuItem SI2 = new MenuItem("Start Automate game");
         menuBar.add(Start_menu);
         Start_menu.add(SI1);
+        Start_menu.add(SI2);
         this.setMenuBar(menuBar);
 
 
@@ -71,49 +74,44 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
             }
         });
     }
-
+class MyPanel extends JPanel {
     @Override
-    public void paint(Graphics g)
-    {
-        g.drawImage(MapImg , 0 , 0 ,this.getWidth() , this.getHeight() , this);
-        Point3D pos,pos1;
+    public void paint(Graphics g) {
+        g.drawImage(MapImg, 0, 0, this.getWidth(), this.getHeight(), this);
+        Point3D pos, pos1;
         //draw Player
-        pos = map.image2frame(map.world2frame(game.getPlayer().getLocation()) , this.getWidth() , this.getHeight());
-        g.drawImage(OurPacmanImg , pos.ix() + Math.round(PacmanIconSize/2) , pos.iy() + Math.round(PacmanIconSize/2) ,PacmanIconSize ,PacmanIconSize ,  this);
+        pos = map.image2frame(map.world2frame(game.getPlayer().getLocation()), this.getWidth(), this.getHeight());
+        g.drawImage(OurPacmanImg, pos.ix() + Math.round(PacmanIconSize / 2), pos.iy() + Math.round(PacmanIconSize / 2), PacmanIconSize, PacmanIconSize, this);
         //draw Pacmans
-        for(int i = 0; i < game.sizeR(); i++)
-        {
+        for (int i = 0; i < game.sizeR(); i++) {
             //pos = map.CoordinateToPixel(game.getPackman(i).getLocation() ,this.getWidth() , this.getHeight());
-            pos = map.image2frame(map.world2frame(game.getPackman(i).getLocation()) , this.getWidth() , this.getHeight());
-            g.drawImage(PacmanImg , pos.ix() , pos.iy() , PacmanIconSize , PacmanIconSize , this);
+            pos = map.image2frame(map.world2frame(game.getPackman(i).getLocation()), this.getWidth(), this.getHeight());
+            g.drawImage(PacmanImg, pos.ix(), pos.iy(), PacmanIconSize, PacmanIconSize, this);
         }
         //draw Ghosts
-        for(int i = 0; i < game.sizeG(); i++)
-        {
+        for (int i = 0; i < game.sizeG(); i++) {
             //pos = map.CoordinateToPixel(game.getGhosts(i).getLocation() , this.getWidth() , this.getHeight());
-            pos = map.image2frame(map.world2frame(game.getGhosts(i).getLocation()) , this.getWidth() , this.getHeight());
-            g.drawImage(GhostImg , pos.ix() , pos.iy() , FruitIconSize , FruitIconSize , this);
+            pos = map.image2frame(map.world2frame(game.getGhosts(i).getLocation()), this.getWidth(), this.getHeight());
+            g.drawImage(GhostImg, pos.ix(), pos.iy(), FruitIconSize, FruitIconSize, this);
         }
         //draw Fruits
-        for(int i = 0; i < game.sizeT(); i++)
-        {
+        for (int i = 0; i < game.sizeT(); i++) {
             //pos = map.CoordinateToPixel(game.getTarget(i).getLocation() , this.getWidth() , this.getHeight());
-            pos = map.image2frame(map.world2frame(game.getTarget(i).getLocation()) , this.getWidth() , this.getHeight());
-            g.drawImage(FruitImg , pos.ix() + Math.round(FruitIconSize/2) , pos.iy() + Math.round(FruitIconSize/2) , FruitIconSize , FruitIconSize , this);
+            pos = map.image2frame(map.world2frame(game.getTarget(i).getLocation()), this.getWidth(), this.getHeight());
+            g.drawImage(FruitImg, pos.ix() + Math.round(FruitIconSize / 2), pos.iy() + Math.round(FruitIconSize / 2), FruitIconSize, FruitIconSize, this);
         }
         //draw Boxes
-        for(int i = 0; i < game.sizeB(); i++)
-        {
+        for (int i = 0; i < game.sizeB(); i++) {
             //pos = map.CoordinateToPixel(game.getBox(i).getMin() , this.getWidth() , this.getHeight());
-            pos = map.image2frame(map.world2frame(game.getBox(i).getMin()) , this.getWidth() , this.getHeight());
+            pos = map.image2frame(map.world2frame(game.getBox(i).getMin()), this.getWidth(), this.getHeight());
             //pos1 = map.CoordinateToPixel(game.getBox(i).getMax() , this.getWidth() , this.getHeight());
-            pos1 = map.image2frame(map.world2frame(game.getBox(i).getMax()) , this.getWidth() , this.getHeight());
+            pos1 = map.image2frame(map.world2frame(game.getBox(i).getMax()), this.getWidth(), this.getHeight());
             int width = pos1.ix() - pos.ix();
             int height = pos.iy() - pos1.iy();
-            g.fillRect(pos.ix() , pos1.iy() , width , height);
+            g.fillRect(pos.ix(), pos1.iy(), width, height);
         }
-
     }
+}
 
     /**
      * Invoked when the mouse button has been clicked (pressed
@@ -124,28 +122,8 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
     @Override
     public void mouseClicked(MouseEvent e)
     {
-        //PacmanAngle = map.Azimuth(map.CoordinateToPixel(game.getPlayer().getLocation() , this.getWidth() , this.getHeight()) , new Pixel(e.getX() , e.getY()));
-        //PacmanAngle = map.AngleBetweenTwoPixel(map.CoordinateToPixel(game.getPlayer().getLocation() , this.getWidth() , this.getHeight()) , new Pixel(e.getX() , e.getY()));
-        //Point3D PlayerTemp = map.image2frame(map.world2frame(game.getPlayer().getLocation()) , this.getWidth() , this.getHeight());
-        //LatLonAlt MouseInCords = map.frame2world(new Point3D(e.getX() , e.getY() , 0));
         LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX() , e.getY()) , this.getWidth() , this.getHeight()));
-        /*double dx = e.getX() - PlayerTemp.x();
-        double dy = e.getY() - PlayerTemp.y();
-        PacmanAngle = Coords.Cords.angXY((dx) , (dy));
-        if(0<=dx && 0<dy){
-            PacmanAngle+=90;
-        }
-        else if(0<dx && 0>=dy){
-            PacmanAngle-=90;
-        }
-        else if(dx<0 && 0<=dy){
-            PacmanAngle-=90;
-        }
-        else if(dx<=0 && dy<0){
-            PacmanAngle+=90;
-        }*/
         PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(MouseInCords)[0];
-
     }
 
     /**
@@ -207,11 +185,13 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
     @Override
     public void run()
     {
+        play.setIDs(204375455,312531031);
         play.start();
         while (play.isRuning())
         {
             play.rotate(PacmanAngle);
             System.out.println(play.getStatistics());
+            System.out.println(play.getBoard());
             repaint();
             try {
                 Thread.sleep(100);
