@@ -1,6 +1,7 @@
 
 package GUI;
 
+import Algorithms.Ex4Algo;
 import Coords.LatLonAlt;
 import Coords.Map;
 import Factory.MapFactory;
@@ -18,6 +19,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class Ex4Gui extends JFrame implements MouseListener, Runnable
 {
@@ -27,6 +29,7 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
     Map map;
     int FruitIconSize = 20 , PacmanIconSize = 25;
     double PacmanAngle = 90;
+    boolean AutmateGame = false, ManulGame = false;
 
     public Ex4Gui()
     {
@@ -49,10 +52,11 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
     {
         MyPanel panel = new MyPanel();
         add(panel);
-        game = new Game("data/Ex4_OOP_example5.csv");
+        game = new Game("data/Ex4_OOP_example1.csv");
         play = new Play(game);
         map = MapFactory.BoazArielMap();
         play.setInitLocation( 32.1040,35.2061);
+        //play.setInitLocation(40,40);
 
         MenuBar menuBar = new MenuBar();
         Menu Start_menu = new Menu("Game Menu");
@@ -70,6 +74,18 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
             @Override
             public void actionPerformed(ActionEvent e) {
                 Thread t = new Thread(temp);
+                AutmateGame = false;
+                ManulGame = true;
+                t.start();
+            }
+        });
+
+        SI2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Thread t = new Thread(temp);
+                AutmateGame = true;
+                ManulGame = false;
                 t.start();
             }
         });
@@ -122,8 +138,17 @@ class MyPanel extends JPanel {
     @Override
     public void mouseClicked(MouseEvent e)
     {
-        LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX() , e.getY()) , this.getWidth() , this.getHeight()));
-        PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(MouseInCords)[0];
+        if(!ManulGame && !AutmateGame)
+        {
+            LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX(), e.getY()), this.getWidth(), this.getHeight()));
+            play.setInitLocation(MouseInCords.x() , MouseInCords.y());
+            repaint();
+        }
+        else
+            {
+            LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX(), e.getY()), this.getWidth(), this.getHeight()));
+            PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(MouseInCords)[0];
+        }
     }
 
     /**
@@ -187,17 +212,37 @@ class MyPanel extends JPanel {
     {
         play.setIDs(204375455,312531031);
         play.start();
-        while (play.isRuning())
-        {
-            play.rotate(PacmanAngle);
-            System.out.println(play.getStatistics());
-            System.out.println(play.getBoard());
-            repaint();
-            try {
-                Thread.sleep(100);
+        if(ManulGame) {
+            while (play.isRuning()) {
+                play.rotate(PacmanAngle);
+                System.out.println(play.getStatistics());
+                repaint();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            catch (InterruptedException e) {
-                e.printStackTrace();
+        }
+        else if(AutmateGame)
+        {
+            while (play.isRuning())
+            {
+                LinkedList<LatLonAlt> path = Ex4Algo.Path(game.getPlayer().getLocation() , game.getTargets(), Ex4Algo.CalcGeoBox(game));
+                for(int  i = 0; i < path.size(); i++)
+                {
+                    PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(path.get(i))[0];
+                    while (game.getPlayer().getLocation().GPS_distance(path.get(i)) > 1) {
+                        play.rotate(PacmanAngle);
+                        System.out.println(play.getStatistics());
+                        repaint();
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
         }
     }

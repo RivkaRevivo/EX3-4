@@ -3,7 +3,9 @@ package Algorithms;
 import Coords.GeoBox;
 import Coords.LatLonAlt;
 import Geom.Line;
+import Robot.Game;
 import graph.Graph;
+import graph.Graph_Algo;
 import graph.Node;
 import Robot.Fruit;
 
@@ -29,7 +31,8 @@ public class Ex4Algo
             {
                 for(int k = 0; k < box_list.size(); k++)
                 {
-                    if(box_list.get(k).isIn2D(nodes[j]))
+                    //if(box_list.get(k).isIn2D(nodes[j]))
+                    if(isNodeinBox(box_list.get(k),nodes[j]))
                     {
                         inNode = true;
                         break;
@@ -43,45 +46,99 @@ public class Ex4Algo
         return node_list;
     }
 
-    private static void CalcEdegs(LinkedList<Node> nodes_list , LinkedList<LatLonAlt> node_pos_list , LinkedList<Line> line_list)
+    private static void CalcEdegs(Graph graph, LinkedList<LatLonAlt> node_pos_list, LinkedList<Line> line_list)
     {
         boolean NoEdge = false;
-        for(int i = 0; i < nodes_list.size(); i++)
+        for(int i = 0; i < graph.size(); i++)
         {
-            for(int j = 0; j < nodes_list.size(); j++)
+            for(int j = 0; j < graph.size(); j++)
             {
-                if (!nodes_list.get(i).hasEdge(nodes_list.get(j).get_id()))
+                if(!graph.getNodeByIndex(i).hasEdge(graph.getNodeByIndex(j).get_id()))
                 {
                     for(int k = 0; k < line_list.size(); k++)
                     {
+                        if(i == j) {
+                            NoEdge = true;
+                            break;
+                        }
                         if(doIntersect(node_pos_list.get(i),node_pos_list.get(j),line_list.get(k).get_FirstPoint(),line_list.get(k).get_SecondPoint()))
                         {
                             NoEdge = true;
+                            break;
                         }
                     }
                 }
 
                 if(!NoEdge)
-                    nodes_list.get(i).add(nodes_list.get(j) , node_pos_list.get(i).distance2D(node_pos_list.get(j)));
+                    graph.addEdge(graph.getNodeByIndex(i).get_name() , graph.getNodeByIndex(j).get_name() , node_pos_list.get(i).distance2D(node_pos_list.get(j)));
                 NoEdge = false;
             }
         }
     }
 
-    public static LinkedList<> Path(LatLonAlt player , ArrayList<Fruit> fruit_list, ArrayList<GeoBox> box_list)
+    public static LinkedList<LatLonAlt> Path(LatLonAlt player , ArrayList<Fruit> fruit_list, ArrayList<GeoBox> box_list)
     {
         Graph G = new Graph();
         ArrayList<LatLonAlt> box_nodes = CalcNode(box_list);
-        G.add(new Node("player"));
+        LinkedList<LatLonAlt> node_pos_list = new LinkedList<>();
+        Node temp;
+        temp = new Node("player");
+        temp.set_id(0);
+        G.add(temp);
+        node_pos_list.add(player);
         for(int i = 0; i < box_nodes.size(); i++)
         {
-            G.add(new Node(""+i));
+            temp = new Node(""+i);
+            temp.set_id(i+1);
+            G.add(temp);
+            node_pos_list.add(box_nodes.get(i));
         }
         for (int i = 0; i < fruit_list.size(); i++)
         {
-            G.add(new Node(""+(i+box_nodes.size())));
+            temp = new Node(""+(i+box_nodes.size()));
+            temp.set_id(i+box_nodes.size()+1);
+            G.add(temp);
+            node_pos_list.add(fruit_list.get(i).getLocation());
         }
 
+        LinkedList<Line> line_list = new LinkedList<Line>();
+        for (int i = 0; i < box_list.size(); i++)
+        {
+            line_list.add(new Line(box_list.get(i).getMax() , new LatLonAlt(box_list.get(i).getMax().lat() , box_list.get(i).getMin().lon() , 0)));
+            line_list.add(new Line(box_list.get(i).getMax() , new LatLonAlt(box_list.get(i).getMin().lat() , box_list.get(i).getMax().lon() , 0)));
+            line_list.add(new Line(box_list.get(i).getMin() , new LatLonAlt(box_list.get(i).getMin().lat() , box_list.get(i).getMax().lon() , 0)));
+            line_list.add(new Line(box_list.get(i).getMin() , new LatLonAlt(box_list.get(i).getMax().lat() , box_list.get(i).getMin().lon() , 0)));
+
+        }
+
+        CalcEdegs(G,node_pos_list,line_list);
+        Graph_Algo.dijkstra(G,"player");
+        double Mindist = Integer.MAX_VALUE;
+        Node b , Min_dist_Node = G.getNodeByName("player");
+        for (int i = 0; i < fruit_list.size(); i++)
+        {
+            b = G.getNodeByName("" + (i+box_nodes.size()));
+            if(b.getDist() < Mindist)
+            {
+                Mindist = b.getDist();
+                Min_dist_Node = b;
+            }
+        }
+
+        ArrayList<String> ShortPath = Min_dist_Node.getPath();
+        LinkedList<LatLonAlt> ShortestPath = new LinkedList<>();
+        int j;
+        for(int i = 1; i < ShortPath.size(); i++)
+        {
+            j = Integer.parseInt(ShortPath.get(i));
+            ShortestPath.add(box_nodes.get(j));
+        }
+        //j = Integer.parseInt(Min_dist_Node.get_name());
+        ShortestPath.add(node_pos_list.get(Min_dist_Node.get_id()));
+
+        Graph_Algo.clearGraphData(G);
+
+        return ShortestPath;
     }
 
     private static boolean onSegment(LatLonAlt p, LatLonAlt q, LatLonAlt r)
@@ -119,5 +176,25 @@ public class Ex4Algo
         if (o4 == 0 && onSegment(p2, q1, q2)) return true;
 
         return false;
+    }
+
+    public static ArrayList<GeoBox> CalcGeoBox(Game game)
+    {
+        ArrayList<GeoBox> box_list = new ArrayList<>();
+        for (int i = 0; i < game.sizeB(); i++)
+        {
+            box_list.add(game.getBox(i));
+        }
+
+        return box_list;
+    }
+
+    public static boolean isNodeinBox(GeoBox box,LatLonAlt q) {
+        boolean ans = false;
+        if (q.lat() > box.getMin().lat() && q.lon() > box.getMin().lon() && q.lat() < box.getMax().lat() && q.lon() < box.getMax().lon()) {
+            ans = true;
+        }
+
+        return ans;
     }
 }
