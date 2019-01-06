@@ -154,7 +154,6 @@ public class MyCoords {
 	////////////////the result////////////////////////////////
 		double arr[] = {azimut,eleveation,distance};
 		return arr;
-
 	}
 /**
  * 

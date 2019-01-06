@@ -189,11 +189,24 @@ public class Map
         Point3D Pcoord1= new Point3D(this.PixelToCoordinate( p1));
         Point3D Pcoord2= new Point3D(this.PixelToCoordinate( p2));
 
-        double x=Math.cos(Pcoord2.x())*Math.sin(Pcoord2.y()-Pcoord1.y());
-        double y=(Math.cos(Pcoord1.x())*Math.sin(Pcoord2.x()))
-                -(Math.sin(Pcoord1.x())*Math.cos(Pcoord2.x()*Math.cos(Pcoord2.y()-Pcoord1.y())));
+        double x=Pcoord1.x()-Pcoord2.x();
+        double y= Pcoord1.y()-Pcoord2.y();
 
-        double angle=Math.abs(Math.atan2(x, y));
+
+        double angle=Math.abs(Math.atan(Math.toRadians(y)/Math.toRadians(x) ));
+        angle=Math.toDegrees(angle);
+        if(x<0 && y<0){
+            angle=angle;
+        }
+        else if(x<0&&y>0){
+            angle=angle+90;
+        }
+        else if(x>0&&y<0){
+            angle=angle+270;
+        }
+        else{
+            angle=angle;
+        }
         return angle;
     }
 
@@ -212,5 +225,14 @@ public class Map
         Point3D firstP = PixelToCoordinate(new Pixel(642 , 0));
         Point3D SecondP = PixelToCoordinate(new Pixel(642 , 1));
         return c.distance3d(firstP , SecondP);
+    }
+
+    public double AngleBetweenTwoPixel(Pixel p1 , Pixel p2)
+    {
+        int dx = p2.getX() - p1.getX();
+        int dy = p2.getY() - p1.getY();
+        double rad = Math.toDegrees(Math.atan2(dy, dx));
+        rad = 360 - rad;
+        return rad;
     }
 }
