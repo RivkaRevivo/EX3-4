@@ -52,7 +52,7 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
     {
         MyPanel panel = new MyPanel();
         add(panel);
-        game = new Game("data/Ex4_OOP_example1.csv");
+        game = new Game("data/Ex4_OOP_example6.csv");
         play = new Play(game);
         map = MapFactory.BoazArielMap();
         play.setInitLocation( 32.1040,35.2061);
