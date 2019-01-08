@@ -61,11 +61,15 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
 
         MenuBar menuBar = new MenuBar();
         Menu Start_menu = new Menu("Game Menu");
+        Menu Load_menu = new Menu("Load Game");
         MenuItem SI1 = new MenuItem("Start manual game");
         MenuItem SI2 = new MenuItem("Start Automate game");
+        MenuItem SI3 = new MenuItem("Load csv");
         menuBar.add(Start_menu);
+        menuBar.add(Load_menu);
         Start_menu.add(SI1);
         Start_menu.add(SI2);
+        Load_menu.add(SI3);
         this.setMenuBar(menuBar);
 
 
@@ -90,6 +94,24 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
                 t.start();
             }
         });
+
+        SI3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser("data");
+                if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+                {
+                    File file = fileChooser.getSelectedFile();
+                    game = new Game(file.getPath());
+                    play = new Play(game);
+                    play.setInitLocation( 32.1040,35.2061);
+                    ManulGame = false;
+                    AutmateGame = false;
+                    repaint();
+
+                }
+            }
+        });
     }
 class MyPanel extends JPanel {
     @Override
@@ -98,7 +120,7 @@ class MyPanel extends JPanel {
         Point3D pos, pos1;
         //draw Player
         pos = map.image2frame(map.world2frame(game.getPlayer().getLocation()), this.getWidth(), this.getHeight());
-        g.drawImage(OurPacmanImg, pos.ix() + Math.round(PacmanIconSize / 2), pos.iy() + Math.round(PacmanIconSize / 2), PacmanIconSize, PacmanIconSize, this);
+        g.drawImage(OurPacmanImg, pos.ix(), pos.iy(), PacmanIconSize, PacmanIconSize, this);
         //draw Pacmans
         for (int i = 0; i < game.sizeR(); i++) {
             //pos = map.CoordinateToPixel(game.getPackman(i).getLocation() ,this.getWidth() , this.getHeight());
@@ -115,7 +137,7 @@ class MyPanel extends JPanel {
         for (int i = 0; i < game.sizeT(); i++) {
             //pos = map.CoordinateToPixel(game.getTarget(i).getLocation() , this.getWidth() , this.getHeight());
             pos = map.image2frame(map.world2frame(game.getTarget(i).getLocation()), this.getWidth(), this.getHeight());
-            g.drawImage(FruitImg, pos.ix() + Math.round(FruitIconSize / 2), pos.iy() + Math.round(FruitIconSize / 2), FruitIconSize, FruitIconSize, this);
+            g.drawImage(FruitImg, pos.ix(), pos.iy(), FruitIconSize, FruitIconSize, this);
         }
         //draw Boxes
         for (int i = 0; i < game.sizeB(); i++) {
@@ -142,8 +164,10 @@ class MyPanel extends JPanel {
         if(!ManulGame && !AutmateGame)
         {
             LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX(), e.getY()), this.getWidth(), this.getHeight()));
-            play.setInitLocation(MouseInCords.x() , MouseInCords.y());
+            //LatLonAlt MouseInCords = map.frame2world(new Point3D(e.getX(), e.getY()));
+            play.setInitLocation(MouseInCords.lat() , MouseInCords.lon());
             repaint();
+
         }
         else
             {
@@ -233,7 +257,7 @@ class MyPanel extends JPanel {
                 for(int  i = 0; i < path.size(); i++)
                 {
                     PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(path.get(i))[0];
-                    while (game.getPlayer().getLocation().GPS_distance(path.get(i)) > 1) {
+                    while (game.getPlayer().getLocation().GPS_distance(path.get(i)) > 1 && Ex4Algo.FruitExsit(path.getLast() , game.getTargets())) {
                         play.rotate(PacmanAngle);
                         System.out.println(play.getStatistics());
                         repaint();
@@ -242,6 +266,10 @@ class MyPanel extends JPanel {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                    }
+                    if(!Ex4Algo.FruitExsit(path.getLast() , game.getTargets()))
+                    {
+                        break;
                     }
                 }
             }
