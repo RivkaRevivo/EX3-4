@@ -162,7 +162,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
             {
                 int i = 0;
 
-                //Draw Line Between Pacmans To next Fruit
+                //Draw line Between Pacmans To next Fruit
                 if(CopyPath.size() > 0 && CopyPath.get(0).size() > 0) {
                     Pacman p = thisGame.getPacman_listCopy().get(j);
                     Pixel c1 = thisGame.getMyMap().CoordinateToPixel(p.getPosition(), this.getWidth(), this.getHeight());
@@ -172,7 +172,7 @@ public class MyFrame extends JFrame implements MouseListener, Runnable
                     g.drawLine((int) c1.getX() + 11, (int) c1.getY() + 11, (int) c2.getX() + 11, (int) c2.getY() + 11);
                     g.drawLine((int) c1.getX() + 10, (int) c1.getY() + 10, (int) c2.getX() + 10, (int) c2.getY() + 10);
                 }
-                //Draw Line Between All the Fruits on the Paths
+                //Draw line Between All the Fruits on the Paths
                 while (CopyPath.get(0).size() > i + 1)
                 {
                     Pixel c1 = thisGame.getMyMap().CoordinateToPixel(CopyPath.get(0).get(i).getPosition() , this.getWidth() , this.getHeight());

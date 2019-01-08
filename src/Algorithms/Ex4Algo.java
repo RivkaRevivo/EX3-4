@@ -11,6 +11,11 @@ import graph.Node;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+
+/**
+ * @author Shai kaikov and sela goldenberg
+ * This class hold different Algorithm and function used in Ex4 Most notably the path function we find the shortest path from a player to the nearest fruit
+ */
 public class Ex4Algo
 {
     /**
@@ -187,23 +192,27 @@ public class Ex4Algo
         return ans;
     }
 
-
+    /**
+     * a recursive function that Calculate a list of point between p1 and p2
+     * @param p1 the first point
+     * @param p2 the second point
+     * @param size the number of iteration we want are function to do. size = 5 return about 30 points
+     * @return A list of point represnt a line between the 2 points
+     */
     public static LinkedList<LatLonAlt> GetLine(LatLonAlt p1 , LatLonAlt p2 , int size)
     {
         LinkedList<LatLonAlt> line = new LinkedList<>();
         if(size > 0)
         {
-            LatLonAlt mid = new LatLonAlt((p1.lat() + p2.lat()) / 2 , (p1.lon() + p2.lon()) / 2 , 0 );
-            line.add(mid);
-            LinkedList<LatLonAlt> newLine1 = new LinkedList<>();
-            newLine1 = GetLine(p1 , mid , size - 1);
-            LinkedList<LatLonAlt> newLine2 = new LinkedList<>();
-            newLine2 = GetLine(mid , p2 , size - 1);
-            for (int i = 0; i < newLine1.size(); i++)
+            LatLonAlt mid = new LatLonAlt((p1.lat() + p2.lat()) / 2 , (p1.lon() + p2.lon()) / 2 , 0 ); //calculate the middle point between p1 and p2
+            line.add(mid); // add the middle point the our line
+            LinkedList<LatLonAlt> newLine1 = GetLine(p1 , mid , size - 1); // received the line between p1 and mid
+            LinkedList<LatLonAlt> newLine2 = GetLine(mid , p2 , size - 1); // received the line between p1 and mid
+            for (int i = 0; i < newLine1.size(); i++) // add the first new line to our line
             {
                 line.add(newLine1.get(i));
             }
-            for (int i = 0; i < newLine2.size(); i++)
+            for (int i = 0; i < newLine2.size(); i++) // add the second new line to our line
             {
                 line.add(newLine2.get(i));
             }
@@ -212,6 +221,12 @@ public class Ex4Algo
         return line;
     }
 
+    /**
+     * Check if the fruit exist in the fruit list
+     * @param fruit the location of the fruit we want to check
+     * @param fruit_list the list of fruits
+     * @return True if fruit is in the fruit_list, false otherwise
+     */
     public static boolean FruitExsit(LatLonAlt fruit , ArrayList<Fruit> fruit_list)
     {
         for(int i = 0; i < fruit_list.size(); i++)
@@ -222,6 +237,12 @@ public class Ex4Algo
         return false;
     }
 
+    /**
+     * This function Check which corner of the box(Upper left, down right , etc..) our box_point is in and move it a little outside of the box (for exmple if our box point is in the upper left of the box we move it a little bit in the upper left direction)
+     * @param box_point the point we want the check
+     * @param box_list the list of boxes we need the searched in order to find which box our box point belong
+     * @return The Modified point a little outside the box
+     */
     public static LatLonAlt modifiedPoint(LatLonAlt box_point , ArrayList<GeoBox> box_list)
     {
         GeoBox tmp = box_list.get(0);

@@ -21,16 +21,26 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
+/**
+ * @author Shai kaikov and sela goldenberg
+ * The Gui function used in Ex4
+ * For The Assignment the best Score we were able to get on Manuel game for Example 8 was 30.1
+ *
+ */
+
 public class Ex4Gui extends JFrame implements MouseListener, Runnable
 {
     Play play;
     BufferedImage MapImg,PacmanImg, FruitImg,OurPacmanImg , GhostImg;
-    Game game;//boaz game
+    Game game;
     Map map;
     int FruitIconSize = 20 , PacmanIconSize = 25;
     double PacmanAngle = 90;
     boolean AutmateGame = false, ManulGame = false;
 
+    /**
+     * The constructor of the class the initialize all of the images and call the initGUI function for more initialization
+     */
     public Ex4Gui()
     {
         initGUI();
@@ -48,12 +58,15 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
         }
     }
 
+    /**
+     * This Function initialize the game ,map ,play and also create The menu for the gui and add action listener to all the button in the menu
+     */
     private void initGUI()
     {
         MyPanel panel = new MyPanel();
         add(panel);
 
-        game = new Game("data/Ex4_OOP_example6.csv");
+        game = new Game("data/Ex4_OOP_example1.csv");
         play = new Play(game);
         map = MapFactory.BoazArielMap();
         play.setInitLocation( 32.1040,35.2061);
@@ -74,8 +87,14 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
 
 
 
-        Ex4Gui temp = this;
+        Ex4Gui temp = this; // a temp of this gui so we can used it inside the menu Action listener
+
+        //Start Manual game
         SI1.addActionListener(new ActionListener() {
+            /**
+             * Create a new Thread and start the Manual game
+             * @param e the event needed to be listened
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 Thread t = new Thread(temp);
@@ -85,7 +104,12 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
             }
         });
 
+        //start Automate game
         SI2.addActionListener(new ActionListener() {
+            /**
+             * Create a new Thread and start the Automate game
+             * @param e the event needed to be listened
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 Thread t = new Thread(temp);
@@ -95,7 +119,12 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
             }
         });
 
+        //Load a csv game
         SI3.addActionListener(new ActionListener() {
+            /**
+             * Load a new csv game
+             * @param e the event needed to be listened
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser("data");
@@ -113,7 +142,15 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
             }
         });
     }
-class MyPanel extends JPanel {
+
+    /**
+     * A panel we add to the our frame in order to make the images in the gui to be more clear
+     */
+    class MyPanel extends JPanel {
+        /**
+         * Paint the entire game in its position. get called every time one of the game Character move
+         * @param g the graphic needed to paint
+         */
     @Override
     public void paint(Graphics g) {
         g.drawImage(MapImg, 0, 0, this.getWidth(), this.getHeight(), this);
@@ -156,6 +193,8 @@ class MyPanel extends JPanel {
      * Invoked when the mouse button has been clicked (pressed
      * and released) on a component.
      *
+     * used in order to set the initial position of the player and in the manual game in order to move the player
+     *
      * @param e the event to be processed
      */
     @Override
@@ -164,20 +203,23 @@ class MyPanel extends JPanel {
         if(!ManulGame && !AutmateGame)
         {
             LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX(), e.getY()), this.getWidth(), this.getHeight()));
-            //LatLonAlt MouseInCords = map.frame2world(new Point3D(e.getX(), e.getY()));
             play.setInitLocation(MouseInCords.lat() , MouseInCords.lon());
             repaint();
 
         }
         else
             {
-            LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX(), e.getY()), this.getWidth(), this.getHeight()));
-            PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(MouseInCords)[0];
+                if(ManulGame) {
+                    LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX(), e.getY()), this.getWidth(), this.getHeight()));
+                    PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(MouseInCords)[0];
+                }
         }
     }
 
     /**
      * Invoked when a mouse button has been pressed on a component.
+     *
+     * only here because we need the MouseListener interface for mouseClicked
      *
      * @param e the event to be processed
      */
@@ -189,6 +231,8 @@ class MyPanel extends JPanel {
     /**
      * Invoked when a mouse button has been released on a component.
      *
+     * only here because we need the MouseListener interface for mouseClicked
+     *
      * @param e the event to be processed
      */
     @Override
@@ -198,6 +242,8 @@ class MyPanel extends JPanel {
 
     /**
      * Invoked when the mouse enters a component.
+     *
+     * only here because we need the MouseListener interface for mouseClicked
      *
      * @param e the event to be processed
      */
@@ -209,6 +255,8 @@ class MyPanel extends JPanel {
     /**
      * Invoked when the mouse exits a component.
      *
+     * only here because we need the MouseListener interface for mouseClicked
+     *
      * @param e the event to be processed
      */
     @Override
@@ -216,6 +264,10 @@ class MyPanel extends JPanel {
 
     }
 
+    /**
+     * Return The Image of our map
+     * @return The Map Image
+     */
     public BufferedImage getMapImg()
     {
         return MapImg;
@@ -230,6 +282,12 @@ class MyPanel extends JPanel {
      * The general contract of the method <code>run</code> is that it may
      * take any action whatsoever.
      *
+     * this run used in two scenarios the Automate game and in the Manual game
+     * in both cases the user can choose where to put the player using the mouse and we run until the game is over (Time run out or all the fruits has been eaten),
+     * in the Manual game the user can control the player using the mouse to tell the player where to go
+     * in the Automate game the player move on is on calculating every time where is best to go
+     *
+     *
      * @see Thread#run()
      */
     @Override
@@ -239,8 +297,8 @@ class MyPanel extends JPanel {
         play.start();
         if(ManulGame) {
             while (play.isRuning()) {
-                play.rotate(PacmanAngle);
-                System.out.println(play.getStatistics());
+                play.rotate(PacmanAngle);//change the angle
+                System.out.println(play.getStatistics()); //print the game statistics
                 repaint();
                 try {
                     Thread.sleep(100);
@@ -253,10 +311,12 @@ class MyPanel extends JPanel {
         {
             while (play.isRuning())
             {
+                //Calculate the path to the closest fruit accounting to the boxes
                 LinkedList<LatLonAlt> path = Ex4Algo.Path(game.getPlayer().getLocation() , game.getTargets(), Ex4Algo.CalcGeoBox(game));
-                for(int  i = 0; i < path.size(); i++)
+                for(int  i = 0; i < path.size(); i++) // the pacman move through the path
                 {
                     PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(path.get(i))[0];
+                    //the pacman move to the next point in this path until he reached there or until the fruit in the end of the path got eaten
                     while (game.getPlayer().getLocation().GPS_distance(path.get(i)) > 1 && Ex4Algo.FruitExsit(path.getLast() , game.getTargets())) {
                         play.rotate(PacmanAngle);
                         System.out.println(play.getStatistics());
