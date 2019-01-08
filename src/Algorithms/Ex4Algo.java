@@ -3,11 +3,12 @@ package Algorithms;
 import Coords.GeoBox;
 import Coords.LatLonAlt;
 import Geom.Line;
+
+import Robot.Fruit;
 import Robot.Game;
 import graph.Graph;
 import graph.Graph_Algo;
 import graph.Node;
-import Robot.Fruit;
 
 
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ public class Ex4Algo
         return node_list;
     }
 
-    private static void CalcEdegs(Graph graph, LinkedList<LatLonAlt> node_pos_list, LinkedList<Line> line_list)
+
+    /*private static void CalcEdegs(Graph graph, LinkedList<LatLonAlt> node_pos_list, LinkedList<Line> line_list)
     {
         boolean NoEdge = false;
         for(int i = 0; i < graph.size(); i++)
@@ -74,7 +76,51 @@ public class Ex4Algo
                 NoEdge = false;
             }
         }
+
     }
+
+    }*/
+
+
+    private static void CalcEdegs(Graph graph, LinkedList<LatLonAlt> node_pos_list, ArrayList<GeoBox> box_list)
+    {
+        boolean NoEdge = false;
+        for(int i = 0; i < graph.size(); i++)
+        {
+            for (int j = 0; j < graph.size(); j++)
+            {
+                if (!graph.getNodeByIndex(i).hasEdge(graph.getNodeByIndex(j).get_id()))
+                {
+                    LinkedList<LatLonAlt> Line = GetLine(node_pos_list.get(i) , node_pos_list.get(j) , 5);
+                    for (int k = 0; k < box_list.size(); k++)
+                    {
+                        for(int s = 0; s < Line.size(); s++)
+                        {
+                            if(isNodeinBox(box_list.get(k) , Line.get(s)))
+                            {
+                                NoEdge = true;
+                                break;
+                            }
+                        }
+                        if(NoEdge)
+                            break;
+                    }
+                    if(!NoEdge)
+                        graph.addEdge(graph.getNodeByIndex(i).get_name() , graph.getNodeByIndex(j).get_name() , node_pos_list.get(i).distance2D(node_pos_list.get(j)));
+                    NoEdge = false;
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     public static LinkedList<LatLonAlt> Path(LatLonAlt player , ArrayList<Fruit> fruit_list, ArrayList<GeoBox> box_list)
     {
@@ -111,7 +157,10 @@ public class Ex4Algo
 
         }
 
-        CalcEdegs(G,node_pos_list,line_list);
+
+        //CalcEdegs(G,node_pos_list,line_list);
+        CalcEdegs(G, node_pos_list , box_list);
+
         Graph_Algo.dijkstra(G,"player");
         double Mindist = Integer.MAX_VALUE;
         Node b , Min_dist_Node = G.getNodeByName("player");
@@ -197,4 +246,30 @@ public class Ex4Algo
 
         return ans;
     }
+
+
+    public static LinkedList<LatLonAlt> GetLine(LatLonAlt p1 , LatLonAlt p2 , int size)
+    {
+        LinkedList<LatLonAlt> line = new LinkedList<>();
+        if(size > 0)
+        {
+            LatLonAlt mid = new LatLonAlt((p1.lat() + p2.lat()) / 2 , (p1.lon() + p2.lon()) / 2 , 0 );
+            line.add(mid);
+            LinkedList<LatLonAlt> newLine1 = new LinkedList<>();
+            newLine1 = GetLine(p1 , mid , size - 1);
+            LinkedList<LatLonAlt> newLine2 = new LinkedList<>();
+            newLine2 = GetLine(mid , p2 , size - 1);
+            for (int i = 0; i < newLine1.size(); i++)
+            {
+                line.add(newLine1.get(i));
+            }
+            for (int i = 0; i < newLine2.size(); i++)
+            {
+                line.add(newLine2.get(i));
+            }
+        }
+
+        return line;
+    }
+
 }
