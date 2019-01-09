@@ -18,3 +18,15 @@ in the beggining you can also choose where to put your player, the player have a
 now you have two option you can play it on manual mode or Automate.
 in Manual mode you can control your player using the mouse button. you can push on the map to which direction you want it to go.
 in The Autmate game your player move on it own using The dijkstra algorithm to choose the path to the fruits. 
+
+in order to run this game you need two jars That locate in Ariel university moddel:
+1.Ex4_v0.2.jar
+2.Graph_v0.11.jar
+
+For this Assigment we create a number of new classes. most notably:
+Ex4Algo:
+this class that resign in the Algorithm package contain all the logic we used in this Assigment.
+The Most importent Aspect of this class is to Create a graph decribing our game and compute the shortes path from our player to the fruits in the game. we create a grpah and we put our player ,all the fruits and all the edges of the barriers that are not inside a diffrent barrier as edegs in our graph.
+than we calculate all of the Vertices in the graph. we check every potential Vertex and make sure that its not going through any barrier in the way.
+than we used the dijkstra algorithm in order to look for the shortes path from our player to any fruit.
+
