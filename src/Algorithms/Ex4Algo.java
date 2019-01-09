@@ -73,7 +73,7 @@ public class Ex4Algo
                 if (!graph.getNodeByIndex(i).hasEdge(graph.getNodeByIndex(j).get_id()) && node_pos_list.get(i).distance2D(node_pos_list.get(j)) != 0)
                 {
                     //using getLine we get a sample of points in the Potential edge
-                    LinkedList<LatLonAlt> Line = GetLine(node_pos_list.get(i) , node_pos_list.get(j) , 6);
+                    LinkedList<LatLonAlt> Line = GetLine(node_pos_list.get(i) , node_pos_list.get(j) , 7);
                     for (int k = 0; k < box_list.size(); k++)
                     {
                         for(int s = 0; s < Line.size(); s++)

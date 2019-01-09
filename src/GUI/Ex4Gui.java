@@ -203,7 +203,7 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
         if(!ManulGame && !AutmateGame)
         {
             LatLonAlt MouseInCords = map.frame2world(map.image2frame(new Point3D(e.getX(), e.getY()), this.getWidth(), this.getHeight()));
-            play.setInitLocation(MouseInCords.lat() , MouseInCords.lon());
+            play.setInitLocation(MouseInCords.lat() + 0.0002 , MouseInCords.lon() + 0.0002);
             repaint();
 
         }
@@ -316,8 +316,8 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
                 for(int  i = 0; i < path.size(); i++) // the pacman move through the path
                 {
                     PacmanAngle = game.getPlayer().getLocation().azimuth_elevation_dist(path.get(i))[0];
-                    //the pacman move to the next point in this path until he reached there or until the fruit in the end of the path got eaten
-                    while (game.getPlayer().getLocation().GPS_distance(path.get(i)) > 1 && Ex4Algo.FruitExsit(path.getLast() , game.getTargets())) {
+                    //the pacman move to the next point in this path until he reached there or until the fruit in the end of the path got eaten or until the game stop running
+                    while (game.getPlayer().getLocation().GPS_distance(path.get(i)) > 1 && Ex4Algo.FruitExsit(path.getLast() , game.getTargets()) && play.isRuning()) {
                         play.rotate(PacmanAngle);
                         System.out.println(play.getStatistics());
                         repaint();
@@ -327,14 +327,16 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
                             e.printStackTrace();
                         }
                     }
-                    if(!Ex4Algo.FruitExsit(path.getLast() , game.getTargets()))
+                    if(!Ex4Algo.FruitExsit(path.getLast() , game.getTargets())) // check if the fruit in the end of the line has not been eaten yet
                     {
+                        play.rotate(PacmanAngle);
+                        System.out.println(play.getStatistics());
                         break;
                     }
                 }
             }
         }
 
-        database.sql.PrintFromDatabase();
+        database.sql.PrintFromDatabase(); // After the game finish we print how did we do compare to other game we played and compare to other game played by the class
     }
 }
