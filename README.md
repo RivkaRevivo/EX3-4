@@ -30,3 +30,6 @@ The Most importent Aspect of this class is to Create a graph decribing our game 
 than we calculate all of the Vertices in the graph. we check every potential Vertex and make sure that its not going through any barrier in the way.
 than we used the dijkstra algorithm in order to look for the shortes path from our player to any fruit.
 
+example of one of the games:
+![game number 9](https://user-images.githubusercontent.com/20860993/50909107-d28f3900-1433-11e9-8abe-d165322a55ea.PNG)
+
