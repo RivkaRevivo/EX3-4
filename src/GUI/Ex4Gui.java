@@ -334,5 +334,7 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
                 }
             }
         }
+
+        database.sql.PrintFromDatabase();
     }
 }
