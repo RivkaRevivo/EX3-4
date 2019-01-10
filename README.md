@@ -24,11 +24,16 @@ in order to run this game you need two jars That locate in Ariel university modd
 2.Graph_v0.11.jar
 
 For this Assigment we create a number of new classes. most notably:
+
 Ex4Algo:
 this class that resign in the Algorithm package contain all the logic we used in this Assigment.
 The Most importent Aspect of this class is to Create a graph decribing our game and compute the shortes path from our player to the fruits in the game. we create a grpah and we put our player ,all the fruits and all the edges of the barriers that are not inside a diffrent barrier as edegs in our graph.
 than we calculate all of the Vertices in the graph. we check every potential Vertex and make sure that its not going through any barrier in the way.
 than we used the dijkstra algorithm in order to look for the shortes path from our player to any fruit.
+
+sql:
+this class that resign in the database package used the connect to the database in the cloud and compare our last game resolt to our earlier games and to the games of the rest of the class that played on the same map. the main function in this class called "PrintFromDatabase" and what it does is it first connect to the database and pull the result of our last game and the ID of the map we play. than its pull all of the game we played on the same ID and compare it to the latest game. after that it does the same to all the game played on the same ID on the database. in the end we print on to the console what placed we came comapre to our previous game and compare to the rest of the databse.
+
 
 example of one of the games:
 ![game number 9](https://user-images.githubusercontent.com/20860993/50909107-d28f3900-1433-11e9-8abe-d165322a55ea.PNG)
