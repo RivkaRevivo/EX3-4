@@ -35,6 +35,13 @@ sql:
 this class that resign in the database package used the connect to the database in the cloud and compare our last game resolt to our earlier games and to the games of the rest of the class that played on the same map. the main function in this class called "PrintFromDatabase" and what it does is it first connect to the database and pull the result of our last game and the ID of the map we play. than its pull all of the game we played on the same ID and compare it to the latest game. after that it does the same to all the game played on the same ID on the database. in the end we print on to the console what placed we came comapre to our previous game and compare to the rest of the databse.
 
 
-example of one of the games:
+example of game number 9:
 ![game number 9](https://user-images.githubusercontent.com/20860993/50909107-d28f3900-1433-11e9-8abe-d165322a55ea.PNG)
 
+
+example of game number 5:
+![game number 5](https://user-images.githubusercontent.com/20860993/51048196-fccb2d00-15d2-11e9-8db3-99e3f3b1705a.PNG)
+
+
+example of game number 2:
+![game number 2](https://user-images.githubusercontent.com/20860993/51048267-2d12cb80-15d3-11e9-9936-4936e770a47a.PNG)
