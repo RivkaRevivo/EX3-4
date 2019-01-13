@@ -19,8 +19,11 @@ now you have two option you can play it on manual mode or Automate.
 in Manual mode you can control your player using the mouse button. you can push on the map to which direction you want it to go.
 in The Autmate game your player move on it own using The dijkstra algorithm to choose the path to the fruits. 
 
-in order to run this game you need two jars That locate in Ariel university moddel:
+in order to run this game you need two jars That locate in Ariel university moddel. They are also locate in The JAR folder in the project:
+
 1.Ex4_v0.2.jar
+
+
 2.Graph_v0.11.jar
 
 For this Assigment we create a number of new classes. most notably:
