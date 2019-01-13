@@ -26,13 +26,13 @@ public class sql
 
             Statement statement = connection.createStatement();
 
-            String allCustomersQuery = "SELECT * FROM logs where FirstID = 204375455 and SecondID = 312531031;";
+            String allCustomersQuery = "SELECT * FROM logs where FirstID = 204375455 and SecondID = 312531031 and ThirdID = 308019819;";
             ResultSet resultSet = statement.executeQuery(allCustomersQuery);
             resultSet.last(); // we take the last game we played and extract the points and the gameID
             double LastGameScore = resultSet.getDouble("Point");
             double GameID = resultSet.getDouble("SomeDouble");
 
-            allCustomersQuery = "SELECT * FROM logs where FirstID = 204375455 and SecondID = 312531031 and SomeDouble = "
+            allCustomersQuery = "SELECT * FROM logs where FirstID = 204375455 and SecondID = 312531031 and ThirdID = 308019819 and SomeDouble = "
                                        + GameID + " ORDER BY point DESC;"; // we take all the games we played on the same GameID
             resultSet = statement.executeQuery(allCustomersQuery);
             int i = 1;

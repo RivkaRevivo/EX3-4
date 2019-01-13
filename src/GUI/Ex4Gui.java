@@ -293,7 +293,7 @@ public class Ex4Gui extends JFrame implements MouseListener, Runnable
     @Override
     public void run()
     {
-        play.setIDs(204375455,312531031);
+        play.setIDs(204375455,312531031,308019819);
         play.start();
         if(ManulGame) {
             while (play.isRuning()) {
